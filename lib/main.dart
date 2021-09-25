@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Libreta de GPS',
+        title: 'Libreta de GPs',
         theme: ThemeData(primarySwatch: Colors.teal),
         initialRoute: "/",
         routes: {
