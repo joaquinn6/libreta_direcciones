@@ -17,43 +17,42 @@ class _AddGPSState extends State<AddGPS> {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Agregar Dirección'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  _saveLocation(context);
-                },
-                icon: const Icon(Icons.save_outlined))
-          ],
           elevation: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-              key: formkey,
-              child: Column(children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Nombre", icon: Icon(Icons.home_outlined)),
-                  onSaved: (value) {
-                    nombre = value!;
-                  },
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Campo requerido";
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Detalle",
-                      icon: Icon(Icons.directions_outlined)),
-                  onSaved: (value) {
-                    detalle = value!;
-                  },
-                  maxLines: 3,
-                ),
-              ]))),
+      body: SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                  key: formkey,
+                  child: Column(children: [
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          labelText: "Nombre", icon: Icon(Icons.home_outlined)),
+                      onSaved: (value) {
+                        nombre = value!;
+                      },
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return "Campo requerido";
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          labelText: "Detalle",
+                          icon: Icon(Icons.directions_outlined)),
+                      onSaved: (value) {
+                        detalle = value!;
+                      },
+                      maxLines: 3,
+                    ),
+                  ])))),
+      floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.save_outlined),
+          onPressed: () {
+            _saveLocation(context);
+          }),
     );
   }
 

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
-import 'add_location.dart';
-import 'location_details.dart';
+import 'package:anim_search_bar/anim_search_bar.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +17,23 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
           title: const Text('Libreta de GPS'),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search))
+            AnimSearchBar(
+                width: 250.0,
+                closeSearchOnSuffixTap: true,
+                helpText: "Buscar...",
+                color: Colors.teal,
+                style: const TextStyle(color: Colors.white),
+                textController: textController,
+                onSuffixTap: () {
+                  setState(() {
+                    textController.clear();
+                  });
+                }),
           ],
           elevation: 10,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-      body: MyBodyWidget(),
+      body: SafeArea(child: MyBodyWidget()),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add_location_alt_outlined),
           onPressed: () {
@@ -26,6 +43,7 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class MyBodyWidget extends StatelessWidget {
   MyBodyWidget({Key? key}) : super(key: key);
 

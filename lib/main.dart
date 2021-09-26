@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
         title: 'Libreta de GPs',
         theme: ThemeData(primarySwatch: Colors.teal),
         initialRoute: "/",
+        debugShowCheckedModeBanner: false,
         routes: {
           "/": (BuildContext context) => const MyHomePage(),
           "/details": (BuildContext context) => const DetailLocation(),

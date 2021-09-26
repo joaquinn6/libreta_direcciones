@@ -1,5 +1,5 @@
 name: libreta_de_ubicaciones
-description: A new Flutter project.
+description: Easy way to save your locations and go back to them .
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -29,6 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_speed_dial: ^3.0.5
+  anim_search_bar: ^2.0.2
 
 
   # The following adds the Cupertino Icons font to your application.
