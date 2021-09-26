@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'screens/edit_location.dart';
 import 'screens/home_page.dart';
 import 'screens/add_location.dart';
 import 'screens/location_details.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           "/": (BuildContext context) => const MyHomePage(),
           "/details": (BuildContext context) => const DetailLocation(),
           "/add": (BuildContext context) => const AddGPS(),
+          "/edit": (BuildContext context) => const EditGPS(),
         });
   }
 }

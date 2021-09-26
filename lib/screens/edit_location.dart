@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class AddGPS extends StatefulWidget {
-  const AddGPS({Key? key}) : super(key: key);
+class EditGPS extends StatefulWidget {
+  const EditGPS({Key? key}) : super(key: key);
   @override
-  _AddGPSState createState() => _AddGPSState();
+  _EditGPSState createState() => _EditGPSState();
 }
 
-class _AddGPSState extends State<AddGPS> {
+class _EditGPSState extends State<EditGPS> {
   late String nombre;
   late String detalle;
 

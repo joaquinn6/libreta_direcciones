@@ -60,7 +60,7 @@ class MyBodyWidget extends StatelessWidget {
           final name = direcciones[index];
           return ListTile(
             title: Text(name),
-            leading: const Icon(Icons.push_pin),
+            leading: const Icon(Icons.location_on_outlined),
             onTap: () {
               Navigator.of(context).pushNamed("/details", arguments: name);
             },
