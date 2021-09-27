@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 
+import '../db.dart';
+
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
 
@@ -14,6 +16,8 @@ class DetailLocation extends StatelessWidget {
       appBar: AppBar(title: Text(localidad.nombre.toString()), elevation: 10),
       body: const SafeArea(child: MyDetails()),
       floatingActionButton: SpeedDial(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           overlayColor: Colors.transparent,
           overlayOpacity: 0.0,
           icon: Icons.menu,
@@ -22,24 +26,23 @@ class DetailLocation extends StatelessWidget {
           children: [
             SpeedDialChild(
               child: const Icon(Icons.delete_outline, color: Colors.white),
-              label: 'Borrar',
               backgroundColor: Colors.red,
               onTap: () {
-                _showdialog(context);
+                _showdialog(context, localidad);
               },
             ),
             SpeedDialChild(
               child: const Icon(Icons.edit_outlined, color: Colors.white),
-              label: 'Editar',
               backgroundColor: Colors.lime,
               onTap: () {
-                Navigator.of(context).pushNamed("/form", arguments: localidad);
+                Navigator.of(context)
+                    .pushNamed("/form", arguments: localidad)
+                    .then((value) => Navigator.pop(context));
               },
             ),
             SpeedDialChild(
               child: const Icon(Icons.directions_car_filled_outlined,
                   color: Colors.white),
-              label: 'Ir',
               backgroundColor: Colors.green,
               onTap: () {/* Do something */},
             ),
@@ -47,7 +50,7 @@ class DetailLocation extends StatelessWidget {
     );
   }
 
-  void _showdialog(BuildContext context) {
+  void _showdialog(BuildContext context, Localidad localidad) {
     showDialog(
         context: context,
         barrierDismissible: true,
@@ -59,7 +62,10 @@ class DetailLocation extends StatelessWidget {
               children: [
                 ListTile(
                     title: const Text("Eliminar"),
-                    onTap: () {},
+                    onTap: () {
+                      DB.delete(localidad);
+                      Navigator.pop(context);
+                    },
                     leading: const Icon(Icons.delete_outline)),
                 ListTile(
                     title: const Text("Cancelar"),

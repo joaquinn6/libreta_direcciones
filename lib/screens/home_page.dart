@@ -13,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textController = TextEditingController();
+  late List<Localidad> localidades = List<Localidad>.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -35,40 +36,29 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         elevation: 5.0,
       ),
-      body: SafeArea(child: MyBody()),
+      body: SafeArea(
+          child: ListView.builder(
+              itemCount: localidades.length,
+              itemBuilder: (BuildContext context, int index) {
+                final localidad = localidades[index];
+                return ListTile(
+                  title: Text(localidad.nombre.toString()),
+                  leading: const Icon(Icons.location_on_outlined),
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed("/details", arguments: localidad)
+                        .then((value) => cargarLocations());
+                  },
+                );
+              })),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add_location_alt_outlined),
           onPressed: () {
-            Navigator.of(context).pushNamed("/form", arguments: Localidad());
+            Navigator.of(context)
+                .pushNamed("/form", arguments: Localidad())
+                .then((value) => cargarLocations());
           }),
     );
-  }
-}
-
-class MyBody extends StatefulWidget {
-  MyBody({Key? key}) : super(key: key);
-
-  @override
-  _MyBodyState createState() => _MyBodyState();
-}
-
-class _MyBodyState extends State<MyBody> {
-  late List<Localidad> localidades = List<Localidad>.empty();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: localidades.length,
-        itemBuilder: (BuildContext context, int index) {
-          final localidad = localidades[index];
-          return ListTile(
-            title: Text(localidad.nombre.toString()),
-            leading: const Icon(Icons.location_on_outlined),
-            onTap: () {
-              Navigator.of(context).pushNamed("/details", arguments: localidad);
-            },
-          );
-        });
   }
 
   @override

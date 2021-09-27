@@ -9,20 +9,18 @@ class FormGPS extends StatefulWidget {
 }
 
 class _FormGPSState extends State<FormGPS> {
-  late int id = 0;
   late String nombre = "";
   late String detalle = "";
-
+  late Localidad localidad;
   final formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Localidad localidad =
-        ModalRoute.of(context)!.settings.arguments as Localidad;
+    localidad = ModalRoute.of(context)!.settings.arguments as Localidad;
 
     late String accion =
-        (localidad.id > -1) ? "Editar Dirección" : "Agregar Dirección";
-    late Color barColor = (localidad.id > -1) ? Colors.lime : Colors.green;
+        (localidad.id! > 0) ? "Editar Dirección" : "Agregar Dirección";
+    late Color barColor = (localidad.id! > 0) ? Colors.lime : Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: Text(accion.toString()),
@@ -41,6 +39,8 @@ class _FormGPSState extends State<FormGPS> {
                       onSaved: (value) {
                         nombre = value!;
                       },
+                      maxLength: 100,
+                      initialValue: localidad.nombre.toString(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Campo requerido";
@@ -51,10 +51,13 @@ class _FormGPSState extends State<FormGPS> {
                       decoration: const InputDecoration(
                           labelText: "Detalle",
                           icon: Icon(Icons.directions_outlined)),
+                      initialValue: localidad.detalle.toString(),
+                      maxLength: 500,
+                      maxLines: 5,
+                      minLines: 1,
                       onSaved: (value) {
                         detalle = value!;
                       },
-                      maxLines: 3,
                     ),
                   ])))),
       floatingActionButton: FloatingActionButton(
@@ -68,9 +71,15 @@ class _FormGPSState extends State<FormGPS> {
   void _saveLocation(BuildContext context) {
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
-      Localidad localidad = Localidad(nombre: nombre, detalle: detalle);
-      DB.insert(localidad);
-      Navigator.pushNamed(context, "/");
+      localidad.nombre = nombre;
+      localidad.detalle = detalle;
+      if (localidad.id! > 0) {
+        DB.update(localidad);
+      } else {
+        localidad.id = null;
+        DB.insert(localidad);
+      }
+      Navigator.pop(context);
     }
   }
 }
