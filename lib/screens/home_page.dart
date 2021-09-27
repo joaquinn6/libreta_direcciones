@@ -17,6 +17,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
+    bool isDark = brightnessValue == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Libreta de GPS'),
@@ -25,7 +28,9 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 250.0,
               closeSearchOnSuffixTap: true,
               helpText: "Buscar...",
-              color: const Color(0xFFB5EDB3),
+              color:
+                  (isDark) ? const Color(0x00535353) : const Color(0xFFB5EDB3),
+              style: TextStyle(color: (isDark) ? Colors.white : Colors.black),
               textController: textController,
               onSuffixTap: () {
                 setState(() {

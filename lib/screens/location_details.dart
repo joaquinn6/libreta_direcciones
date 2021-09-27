@@ -9,7 +9,9 @@ class DetailLocation extends StatelessWidget {
   Widget build(BuildContext context) {
     final Localidad localidad =
         ModalRoute.of(context)!.settings.arguments as Localidad;
-
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
+    bool isDark = brightnessValue == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text(localidad.nombre.toString()),
@@ -22,7 +24,8 @@ class DetailLocation extends StatelessWidget {
           overlayColor: Colors.transparent,
           overlayOpacity: 0.0,
           icon: Icons.menu,
-          backgroundColor: const Color(0xFFB5EDB3),
+          backgroundColor:
+              (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
           children: [
             SpeedDialChild(
               child: const Icon(Icons.edit_outlined, color: Colors.white),
