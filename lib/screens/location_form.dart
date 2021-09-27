@@ -20,12 +20,10 @@ class _FormGPSState extends State<FormGPS> {
 
     late String accion =
         (localidad.id! > 0) ? "Editar Dirección" : "Agregar Dirección";
-    late Color barColor = (localidad.id! > 0) ? Colors.lime : Colors.green;
     return Scaffold(
       appBar: AppBar(
         title: Text(accion.toString()),
         elevation: 10,
-        backgroundColor: barColor,
       ),
       body: SafeArea(
           child: Padding(
@@ -39,7 +37,6 @@ class _FormGPSState extends State<FormGPS> {
                       onSaved: (value) {
                         nombre = value!;
                       },
-                      cursorColor: barColor,
                       textCapitalization: TextCapitalization.sentences,
                       maxLength: 100,
                       initialValue: localidad.nombre.toString(),
@@ -55,7 +52,6 @@ class _FormGPSState extends State<FormGPS> {
                           icon: Icon(Icons.directions_outlined)),
                       initialValue: localidad.detalle.toString(),
                       textCapitalization: TextCapitalization.sentences,
-                      cursorColor: barColor,
                       maxLength: 500,
                       maxLines: 5,
                       minLines: 1,
@@ -66,7 +62,6 @@ class _FormGPSState extends State<FormGPS> {
                   ])))),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.save_outlined),
-          backgroundColor: barColor,
           onPressed: () {
             _saveLocation(context);
           }),

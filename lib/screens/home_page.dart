@@ -25,8 +25,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 250.0,
               closeSearchOnSuffixTap: true,
               helpText: "Buscar...",
-              color: Color(0xffF5E0C3),
-              style: const TextStyle(color: Colors.white),
+              color: const Color(0xFFB5EDB3),
               textController: textController,
               onSuffixTap: () {
                 setState(() {
@@ -38,8 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SafeArea(
           child: ListView.separated(
-              separatorBuilder: (context, index) =>
-                  const Divider(color: Colors.blueGrey, height: 0.2),
+              separatorBuilder: (context, index) => const Divider(height: 0.2),
               itemCount: localidades.length,
               itemBuilder: (BuildContext context, int index) {
                 final localidad = localidades[index];
@@ -63,20 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text("confirmación"),
+                          title: const Text("Confirmación"),
                           content: const Text(
                               "Seguro que desea eliminar esta Dirección"),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           actions: <Widget>[
                             TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                                child: const Text("Eliminar")),
-                            TextButton(
                               onPressed: () => Navigator.of(context).pop(false),
                               child: const Text("Cancelar"),
                             ),
+                            ElevatedButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(true),
+                                child: const Text("Eliminar")),
                           ],
                         );
                       },

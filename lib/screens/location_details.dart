@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 
-import '../db.dart';
-
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
 
@@ -16,7 +14,6 @@ class DetailLocation extends StatelessWidget {
       appBar: AppBar(
         title: Text(localidad.nombre.toString()),
         elevation: 10,
-        backgroundColor: Colors.cyan,
       ),
       body: const SafeArea(child: MyDetails()),
       floatingActionButton: SpeedDial(
@@ -25,11 +22,11 @@ class DetailLocation extends StatelessWidget {
           overlayColor: Colors.transparent,
           overlayOpacity: 0.0,
           icon: Icons.menu,
-          backgroundColor: const Color(0xffF5E0C3),
+          backgroundColor: const Color(0xFFB5EDB3),
           children: [
             SpeedDialChild(
               child: const Icon(Icons.edit_outlined, color: Colors.white),
-              backgroundColor: Colors.lime,
+              backgroundColor: const Color(0xAAC3F5E4),
               onTap: () {
                 Navigator.of(context)
                     .pushNamed("/form", arguments: localidad)
@@ -39,7 +36,7 @@ class DetailLocation extends StatelessWidget {
             SpeedDialChild(
               child: const Icon(Icons.directions_car_filled_outlined,
                   color: Colors.white),
-              backgroundColor: Colors.green,
+              backgroundColor: const Color(0xFF3E938F),
               onTap: () {/* Do something */},
             ),
           ]),
