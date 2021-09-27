@@ -39,6 +39,8 @@ class _FormGPSState extends State<FormGPS> {
                       onSaved: (value) {
                         nombre = value!;
                       },
+                      cursorColor: barColor,
+                      textCapitalization: TextCapitalization.sentences,
                       maxLength: 100,
                       initialValue: localidad.nombre.toString(),
                       validator: (value) {
@@ -52,6 +54,8 @@ class _FormGPSState extends State<FormGPS> {
                           labelText: "Detalle",
                           icon: Icon(Icons.directions_outlined)),
                       initialValue: localidad.detalle.toString(),
+                      textCapitalization: TextCapitalization.sentences,
+                      cursorColor: barColor,
                       maxLength: 500,
                       maxLines: 5,
                       minLines: 1,
@@ -62,6 +66,7 @@ class _FormGPSState extends State<FormGPS> {
                   ])))),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.save_outlined),
+          backgroundColor: barColor,
           onPressed: () {
             _saveLocation(context);
           }),

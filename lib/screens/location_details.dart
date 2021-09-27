@@ -13,7 +13,11 @@ class DetailLocation extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as Localidad;
 
     return Scaffold(
-      appBar: AppBar(title: Text(localidad.nombre.toString()), elevation: 10),
+      appBar: AppBar(
+        title: Text(localidad.nombre.toString()),
+        elevation: 10,
+        backgroundColor: Colors.cyan,
+      ),
       body: const SafeArea(child: MyDetails()),
       floatingActionButton: SpeedDial(
           shape:
@@ -21,16 +25,8 @@ class DetailLocation extends StatelessWidget {
           overlayColor: Colors.transparent,
           overlayOpacity: 0.0,
           icon: Icons.menu,
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.teal,
+          backgroundColor: const Color(0xffF5E0C3),
           children: [
-            SpeedDialChild(
-              child: const Icon(Icons.delete_outline, color: Colors.white),
-              backgroundColor: Colors.red,
-              onTap: () {
-                _showdialog(context, localidad);
-              },
-            ),
             SpeedDialChild(
               child: const Icon(Icons.edit_outlined, color: Colors.white),
               backgroundColor: Colors.lime,
@@ -48,33 +44,6 @@ class DetailLocation extends StatelessWidget {
             ),
           ]),
     );
-  }
-
-  void _showdialog(BuildContext context, Localidad localidad) {
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-              title: const Text("Advertencia"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              children: [
-                ListTile(
-                    title: const Text("Eliminar"),
-                    onTap: () {
-                      DB.delete(localidad);
-                      Navigator.pop(context);
-                    },
-                    leading: const Icon(Icons.delete_outline)),
-                ListTile(
-                    title: const Text("Cancelar"),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: const Icon(Icons.cancel_outlined)),
-              ]);
-        });
   }
 }
 
