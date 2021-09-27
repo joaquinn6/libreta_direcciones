@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:libreta_de_ubicaciones/classes/localidad.dart';
+
+import '../db.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -15,74 +18,70 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Libreta de GPS'),
-          actions: [
-            AnimSearchBar(
-                width: 250.0,
-                closeSearchOnSuffixTap: true,
-                helpText: "Buscar...",
-                color: Colors.teal,
-                style: const TextStyle(color: Colors.white),
-                textController: textController,
-                onSuffixTap: () {
-                  setState(() {
-                    textController.clear();
-                  });
-                }),
-          ],
-          elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-      body: SafeArea(child: MyBodyWidget()),
+        title: const Text('Libreta de GPS'),
+        actions: [
+          AnimSearchBar(
+              width: 250.0,
+              closeSearchOnSuffixTap: true,
+              helpText: "Buscar...",
+              color: Colors.teal,
+              style: const TextStyle(color: Colors.white),
+              textController: textController,
+              onSuffixTap: () {
+                setState(() {
+                  textController.clear();
+                });
+              }),
+        ],
+        elevation: 5.0,
+      ),
+      body: SafeArea(child: MyBody()),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add_location_alt_outlined),
           onPressed: () {
-            Navigator.of(context).pushNamed("/add");
+            Navigator.of(context).pushNamed("/form", arguments: Localidad());
           }),
     );
   }
 }
 
-// ignore: must_be_immutable
-class MyBodyWidget extends StatelessWidget {
-  MyBodyWidget({Key? key}) : super(key: key);
+class MyBody extends StatefulWidget {
+  MyBody({Key? key}) : super(key: key);
 
-  List<String> direcciones = [
-    "Vet. San judas",
-    "Vet. Metro",
-    "Vet. Galeria",
-    "Vet. Boer",
-    "Vet. Esquipulas",
-    "Vet. El doral",
-    "Vet. Mayoreo",
-    "Vet. Centro America",
-    "Vet. Pilar",
-    "Vet. Zumen",
-    "Vet. San judas",
-    "Vet. Metro",
-    "Vet. Galeria",
-    "Vet. Boer",
-    "Vet. Esquipulas",
-    "Vet. El doral",
-    "Vet. Mayoreo",
-    "Vet. Centro America",
-    "Vet. Pilar",
-    "Vet. Zumen",
-  ];
+  @override
+  _MyBodyState createState() => _MyBodyState();
+}
+
+class _MyBodyState extends State<MyBody> {
+  late List<Localidad> localidades = List<Localidad>.empty();
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: direcciones.length,
+        itemCount: localidades.length,
         itemBuilder: (BuildContext context, int index) {
-          final name = direcciones[index];
+          final localidad = localidades[index];
           return ListTile(
-            title: Text(name),
+            title: Text(localidad.nombre.toString()),
             leading: const Icon(Icons.location_on_outlined),
             onTap: () {
-              Navigator.of(context).pushNamed("/details", arguments: name);
+              Navigator.of(context).pushNamed("/details", arguments: localidad);
             },
           );
         });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarLocations();
+  }
+
+  cargarLocations() async {
+    List<Localidad> auxLocation = await DB.localidades();
+
+    setState(() {
+      localidades = auxLocation;
+    });
   }
 }

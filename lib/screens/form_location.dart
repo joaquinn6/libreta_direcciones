@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:libreta_de_ubicaciones/classes/localidad.dart';
+import 'package:libreta_de_ubicaciones/db.dart';
 
-class AddGPS extends StatefulWidget {
-  const AddGPS({Key? key}) : super(key: key);
+class FormGPS extends StatefulWidget {
+  const FormGPS({Key? key}) : super(key: key);
   @override
-  _AddGPSState createState() => _AddGPSState();
+  _FormGPSState createState() => _FormGPSState();
 }
 
-class _AddGPSState extends State<AddGPS> {
-  late String nombre;
-  late String detalle;
+class _FormGPSState extends State<FormGPS> {
+  late int id = 0;
+  late String nombre = "";
+  late String detalle = "";
 
   final formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    Localidad localidad =
+        ModalRoute.of(context)!.settings.arguments as Localidad;
+
+    late String accion =
+        (localidad.id > -1) ? "Editar Dirección" : "Agregar Dirección";
+    late Color barColor = (localidad.id > -1) ? Colors.lime : Colors.green;
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Agregar Dirección'),
-          elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+        title: Text(accion.toString()),
+        elevation: 10,
+        backgroundColor: barColor,
+      ),
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -59,6 +68,9 @@ class _AddGPSState extends State<AddGPS> {
   void _saveLocation(BuildContext context) {
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
+      Localidad localidad = Localidad(nombre: nombre, detalle: detalle);
+      DB.insert(localidad);
+      Navigator.pushNamed(context, "/");
     }
   }
 }

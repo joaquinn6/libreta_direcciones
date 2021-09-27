@@ -1,65 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final name = ModalRoute.of(context)!.settings.arguments;
+    final Localidad localidad =
+        ModalRoute.of(context)!.settings.arguments as Localidad;
 
     return Scaffold(
-      appBar: AppBar(
-          title: Text(name.toString()),
-          elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-      body: SafeArea(child: MyForm()),
-      floatingActionButton: const FBExpand(),
+      appBar: AppBar(title: Text(localidad.nombre.toString()), elevation: 10),
+      body: const SafeArea(child: MyDetails()),
+      floatingActionButton: SpeedDial(
+          overlayColor: Colors.transparent,
+          overlayOpacity: 0.0,
+          icon: Icons.menu,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.teal,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.delete_outline, color: Colors.white),
+              label: 'Borrar',
+              backgroundColor: Colors.red,
+              onTap: () {
+                _showdialog(context);
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.edit_outlined, color: Colors.white),
+              label: 'Editar',
+              backgroundColor: Colors.lime,
+              onTap: () {
+                Navigator.of(context).pushNamed("/form", arguments: localidad);
+              },
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.directions_car_filled_outlined,
+                  color: Colors.white),
+              label: 'Ir',
+              backgroundColor: Colors.green,
+              onTap: () {/* Do something */},
+            ),
+          ]),
     );
-  }
-}
-
-class FBExpand extends StatelessWidget {
-  const FBExpand({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SpeedDial(
-        overlayColor: Colors.transparent,
-        overlayOpacity: 0.0,
-        icon: Icons.menu,
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.teal,
-        children: [
-          SpeedDialChild(
-            child: const Icon(Icons.delete_outline, color: Colors.white),
-            label: 'Borrar',
-            backgroundColor: Colors.red,
-            onTap: () {
-              _showdialog(context);
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.edit_outlined, color: Colors.white),
-            label: 'Editar',
-            backgroundColor: Colors.lime,
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                "/edit",
-              );
-            },
-          ),
-          SpeedDialChild(
-            child: const Icon(Icons.directions_car_filled_outlined,
-                color: Colors.white),
-            label: 'Ir',
-            backgroundColor: Colors.green,
-            onTap: () {/* Do something */},
-          ),
-        ]);
   }
 
   void _showdialog(BuildContext context) {
@@ -87,8 +72,8 @@ class FBExpand extends StatelessWidget {
   }
 }
 
-class MyForm extends StatelessWidget {
-  const MyForm({Key? key}) : super(key: key);
+class MyDetails extends StatelessWidget {
+  const MyDetails({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

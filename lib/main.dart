@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:libreta_de_ubicaciones/screens/form_location.dart';
 
-import 'screens/edit_location.dart';
 import 'screens/home_page.dart';
-import 'screens/add_location.dart';
 import 'screens/location_details.dart';
 
 void main() {
@@ -23,8 +22,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (BuildContext context) => const MyHomePage(),
           "/details": (BuildContext context) => const DetailLocation(),
-          "/add": (BuildContext context) => const AddGPS(),
-          "/edit": (BuildContext context) => const EditGPS(),
+          "/form": (BuildContext context) => const FormGPS(),
         });
   }
 }
