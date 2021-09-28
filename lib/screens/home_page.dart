@@ -102,7 +102,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               })),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add_location_alt_outlined),
+          child: Icon(Icons.add_location_alt_outlined,
+              color: (isDark) ? Colors.white : Colors.black),
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
             Navigator.of(context)
                 .pushNamed("/form", arguments: Localidad())

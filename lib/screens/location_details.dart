@@ -28,7 +28,8 @@ class DetailLocation extends StatelessWidget {
               (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
           children: [
             SpeedDialChild(
-              child: const Icon(Icons.edit_outlined, color: Colors.white),
+              child: Icon(Icons.edit_outlined,
+                  color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xAAC3F5E4),
               onTap: () {
                 Navigator.of(context)
@@ -37,8 +38,8 @@ class DetailLocation extends StatelessWidget {
               },
             ),
             SpeedDialChild(
-              child: const Icon(Icons.directions_car_filled_outlined,
-                  color: Colors.white),
+              child: Icon(Icons.directions_car_filled_outlined,
+                  color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xFF3E938F),
               onTap: () {/* Do something */},
             ),

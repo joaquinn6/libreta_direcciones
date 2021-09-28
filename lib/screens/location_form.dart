@@ -17,7 +17,9 @@ class _FormGPSState extends State<FormGPS> {
   @override
   Widget build(BuildContext context) {
     localidad = ModalRoute.of(context)!.settings.arguments as Localidad;
-
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
+    bool isDark = brightnessValue == Brightness.dark;
     late String accion =
         (localidad.id! > 0) ? "Editar Dirección" : "Agregar Dirección";
     return Scaffold(
@@ -61,7 +63,9 @@ class _FormGPSState extends State<FormGPS> {
                     ),
                   ])))),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.save_outlined),
+          child: Icon(Icons.save_outlined,
+              color: (isDark) ? Colors.white : Colors.black),
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
             _saveLocation(context);
           }),
