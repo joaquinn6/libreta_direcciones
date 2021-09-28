@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
+import 'package:location/location.dart';
+import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 
 class FormGPS extends StatefulWidget {
   const FormGPS({Key? key}) : super(key: key);
@@ -11,12 +13,21 @@ class FormGPS extends StatefulWidget {
 class _FormGPSState extends State<FormGPS> {
   late String nombre = "";
   late String detalle = "";
+  late String stringLocation = "";
   late Localidad localidad;
   final formkey = GlobalKey<FormState>();
+  late LocationData? ubicacion;
+  late List<String>? municipiosData = [];
+  final _controller = TextEditingController();
+
+  late String? _selectedCity;
 
   @override
   Widget build(BuildContext context) {
     localidad = ModalRoute.of(context)!.settings.arguments as Localidad;
+    stringLocation =
+        localidad.latitude.toString() + ", " + localidad.longitude.toString();
+
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
@@ -61,6 +72,20 @@ class _FormGPSState extends State<FormGPS> {
                         detalle = value!;
                       },
                     ),
+                    TextFormField(
+                        controller: _controller,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                            labelText: "Lolcalización",
+                            icon: Icon(Icons.location_on_outlined)),
+                        maxLines: 5,
+                        minLines: 1,
+                        onSaved: (value) {
+                          stringLocation = value!;
+                        }),
+                    ElevatedButton(
+                        onPressed: () => _findLocation(),
+                        child: const Icon(Icons.location_searching_outlined)),
                   ])))),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.save_outlined,
@@ -70,6 +95,12 @@ class _FormGPSState extends State<FormGPS> {
             _saveLocation(context);
           }),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _saveLocation(BuildContext context) {
@@ -84,6 +115,44 @@ class _FormGPSState extends State<FormGPS> {
         DB.insert(localidad);
       }
       Navigator.pop(context);
+    }
+  }
+
+  _findLocation() async {
+    Location location = Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    setState(() {
+      ubicacion = _locationData;
+      _controller.text = _locationData.latitude.toString() +
+          ", " +
+          _locationData.longitude.toString();
+    });
+  }
+
+  void _loadDeptos(String selection) {
+    if (selection.isNotEmpty) {
+      setState(() {
+        municipiosData = municipios[selection];
+      });
     }
   }
 }
