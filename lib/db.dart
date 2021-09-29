@@ -48,10 +48,12 @@ class DB {
         .delete("localidades", where: "id = ?", whereArgs: [localidad.id]);
   }
 
-  static Future<List<Localidad>> localidades() async {
+  static Future<List<Localidad>> localidades(String search) async {
     Database database = await _openDB();
-    final List<Map<String, dynamic>> locationsMap =
-        await database.query("localidades");
+    List<Map<String, dynamic>> locationsMap = await database.query((search
+            .isEmpty)
+        ? "localidades"
+        : "localidades WHERE nombre LIKE '%$search%' or detalle LIKE '%$search%' or departamento LIKE '$search%'");
 
     return List.generate(
       locationsMap.length,

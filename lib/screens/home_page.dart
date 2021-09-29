@@ -13,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController textController = TextEditingController();
+
   late List<Localidad> localidades = List<Localidad>.empty();
 
   @override
@@ -120,13 +121,24 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     cargarLocations();
+    textController.addListener(cargarLocations);
   }
 
-  cargarLocations() async {
-    List<Localidad> auxLocation = await DB.localidades();
+  @override
+  void dispose() {
+    textController.dispose();
+    super.dispose();
+  }
+
+  void cargarLocations() async {
+    List<Localidad> auxLocation = await DB.localidades(textController.text);
 
     setState(() {
       localidades = auxLocation;
     });
+  }
+
+  void _printLatestValue() {
+    print('Second text field: ${textController.text}');
   }
 }

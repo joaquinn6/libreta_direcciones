@@ -92,7 +92,7 @@ class DetailLocation extends StatelessWidget {
 
   Future<void> launchMoovit(double? lat, double? lng) async {
     var url = 'moovit://nearby?lat=${lat.toString()}&lon=${lng.toString()}';
-    var fallbackUrl = 'google.navigation:q=${lat.toString()},${lng.toString()}';
+    var fallbackUrl = 'http://app.appsflyer.com/com.tranzmate?pid=DL&c=';
     try {
       bool launched =
           await launch(url, forceSafariVC: false, forceWebView: false);
