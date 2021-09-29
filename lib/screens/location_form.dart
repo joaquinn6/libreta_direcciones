@@ -24,6 +24,7 @@ class _FormGPSState extends State<FormGPS> {
   final _controller_depto = TextEditingController();
   String current_depto = "";
   bool isEdit = false;
+  bool isEditing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,12 @@ class _FormGPSState extends State<FormGPS> {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
+
+    if (!isEditing) {
+      _controller_ubicacion.text =
+          localidad.latitude.toString() + "," + localidad.longitude.toString();
+      _controller_depto.text = localidad.departamento!;
+    }
     //TO DO: colocar el depto y la localizacion con los controller y poner un if por si se debe colocar en el rebuild o no
     isEdit = ((localidad.id! > 0)) ? true : false;
     late String accion = (isEdit) ? "Editar Dirección" : "Agregar Dirección";
@@ -86,6 +93,7 @@ class _FormGPSState extends State<FormGPS> {
                       textSubmitted: (text) => setState(() {
                         if (text != "") {
                           departamento = text;
+                          isEditing = true;
                         }
                       }),
                     ),
@@ -180,6 +188,7 @@ class _FormGPSState extends State<FormGPS> {
         _controller_ubicacion.text = _locationData.latitude.toString() +
             ", " +
             _locationData.longitude.toString();
+        isEditing = true;
       });
     }
   }

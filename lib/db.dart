@@ -3,7 +3,6 @@ import 'package:path/path.dart';
 
 import 'classes/localidad.dart';
 
-//TO DO: agregar fecha nuevo y fecha edit
 class DB {
   static Future<Database> _openDB() async {
     return openDatabase(join(await getDatabasesPath(), 'localidad.db'),
