@@ -18,7 +18,7 @@ const List<String> departamentos = <String>[
   'RAAS'
 ];
 
-Map<String, List<String>> municipios = {
+const Map<String, List<String>> municipios = {
   "Boaco": <String>[
     'Boaco',
     'Camoapa',

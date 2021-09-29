@@ -1,17 +1,17 @@
 class Localidad {
   int? id;
-  String nombre;
-  String detalle;
-  double latitude;
-  double longitude;
-  double accuracy;
-  double altitude;
-  double heading;
-  int time;
+  String? nombre;
+  String? detalle;
+  double? latitude;
+  double? longitude;
+  double? accuracy;
+  double? altitude;
+  double? heading;
+  double? time;
   DateTime? fecha;
-  String pais;
-  String departamento;
-  String municipio;
+  String? pais;
+  String? departamento;
+  String? municipio;
   bool favorito;
 
   Localidad(
@@ -23,7 +23,7 @@ class Localidad {
       this.accuracy = 0.0,
       this.altitude = 0.0,
       this.heading = 0.0,
-      this.time = 0,
+      this.time = 0.0,
       this.fecha,
       this.pais = "Nicaragua",
       this.departamento = "",
@@ -41,11 +41,11 @@ class Localidad {
       'altitude': altitude,
       'heading': heading,
       'time': time,
-      'fecha': fecha,
+      'fecha': fecha!.toString(),
       'pais': pais,
       'departamento': departamento,
       'municipio': municipio,
-      'favorito': false
+      'favorito': favorito
     };
   }
 }

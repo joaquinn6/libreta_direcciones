@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 
 import 'classes/localidad.dart';
 
+//TO DO: agregar fecha nuevo y fecha edit
 class DB {
   static Future<Database> _openDB() async {
     return openDatabase(join(await getDatabasesPath(), 'localidad.db'),
@@ -11,7 +12,18 @@ class DB {
         """CREATE TABLE localidades (
           id INTEGER PRIMARY KEY, 
           nombre VARCHAR(100), 
-          detalle VARCHAR(500)
+          detalle VARCHAR(500),
+          latitude REAL,
+          longitude REAL,
+          accuracy REAL,
+          altitude REAL,
+          heading REAL,
+          time REAL,
+          fecha TEXT,
+          pais VARCHAR(50),
+          departamento VARCHAR(50),
+          municipio VARCHAR(50),
+          favorito INTEGER
           )""",
       );
     }, version: 1);
@@ -43,10 +55,22 @@ class DB {
         await database.query("localidades");
 
     return List.generate(
-        locationsMap.length,
-        (i) => Localidad(
-            id: locationsMap[i]['id'],
-            nombre: locationsMap[i]['nombre'],
-            detalle: locationsMap[i]['detalle']));
+      locationsMap.length,
+      (i) => Localidad(
+          id: locationsMap[i]['id'],
+          nombre: locationsMap[i]['nombre'],
+          detalle: locationsMap[i]['detalle'],
+          latitude: locationsMap[i]['latitude'],
+          longitude: locationsMap[i]['longitude'],
+          accuracy: locationsMap[i]['accuracy'],
+          altitude: locationsMap[i]['altitude'],
+          heading: locationsMap[i]['heading'],
+          time: locationsMap[i]['time'],
+          fecha: DateTime.parse(locationsMap[i]['fecha']),
+          pais: locationsMap[i]['pais'],
+          departamento: locationsMap[i]['departamento'],
+          municipio: locationsMap[i]['municipio'],
+          favorito: (locationsMap[i]['favorito'] == 0) ? false : true),
+    );
   }
 }

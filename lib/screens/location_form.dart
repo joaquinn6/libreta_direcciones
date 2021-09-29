@@ -3,6 +3,7 @@ import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
 import 'package:location/location.dart';
 import 'package:libreta_de_ubicaciones/static/static_lists.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 
 class FormGPS extends StatefulWidget {
   const FormGPS({Key? key}) : super(key: key);
@@ -11,28 +12,29 @@ class FormGPS extends StatefulWidget {
 }
 
 class _FormGPSState extends State<FormGPS> {
+  final deptokey = GlobalKey<AutoCompleteTextFieldState<String>>();
+  final formkey = GlobalKey<FormState>();
+  late Localidad localidad;
   late String nombre = "";
   late String detalle = "";
-  late String stringLocation = "";
-  late Localidad localidad;
-  final formkey = GlobalKey<FormState>();
+  late String departamento = "";
   late LocationData? ubicacion;
-  late List<String>? municipiosData = [];
-  final _controller = TextEditingController();
-
-  late String? _selectedCity;
+  late String stringLocation = "";
+  final _controller_ubicacion = TextEditingController();
+  final _controller_depto = TextEditingController();
+  String current_depto = "";
+  bool isEdit = false;
 
   @override
   Widget build(BuildContext context) {
     localidad = ModalRoute.of(context)!.settings.arguments as Localidad;
-    stringLocation =
-        localidad.latitude.toString() + ", " + localidad.longitude.toString();
 
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
-    late String accion =
-        (localidad.id! > 0) ? "Editar Dirección" : "Agregar Dirección";
+    //TO DO: colocar el depto y la localizacion con los controller y poner un if por si se debe colocar en el rebuild o no
+    isEdit = ((localidad.id! > 0)) ? true : false;
+    late String accion = (isEdit) ? "Editar Dirección" : "Agregar Dirección";
     return Scaffold(
       appBar: AppBar(
         title: Text(accion.toString()),
@@ -72,19 +74,39 @@ class _FormGPSState extends State<FormGPS> {
                         detalle = value!;
                       },
                     ),
+                    SimpleAutoCompleteTextField(
+                      key: deptokey,
+                      decoration: const InputDecoration(
+                          labelText: "Departamento",
+                          icon: Icon(Icons.location_city_outlined)),
+                      controller: _controller_depto,
+                      suggestions: departamentos,
+                      textChanged: (text) => current_depto = text,
+                      clearOnSubmit: false,
+                      textSubmitted: (text) => setState(() {
+                        if (text != "") {
+                          departamento = text;
+                        }
+                      }),
+                    ),
                     TextFormField(
-                        controller: _controller,
+                        controller: _controller_ubicacion,
                         readOnly: true,
                         decoration: const InputDecoration(
                             labelText: "Lolcalización",
                             icon: Icon(Icons.location_on_outlined)),
                         maxLines: 5,
                         minLines: 1,
+                        validator: (value) {
+                          if (value!.isEmpty || value == "0.0, 0.0") {
+                            return "Campo requerido, presione el boton";
+                          }
+                        },
                         onSaved: (value) {
                           stringLocation = value!;
                         }),
                     ElevatedButton(
-                        onPressed: () => _findLocation(),
+                        onPressed: () => _findLocation(isEdit),
                         child: const Icon(Icons.location_searching_outlined)),
                   ])))),
       floatingActionButton: FloatingActionButton(
@@ -99,7 +121,8 @@ class _FormGPSState extends State<FormGPS> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller_ubicacion.dispose();
+    _controller_depto.dispose();
     super.dispose();
   }
 
@@ -108,7 +131,18 @@ class _FormGPSState extends State<FormGPS> {
       formkey.currentState!.save();
       localidad.nombre = nombre;
       localidad.detalle = detalle;
-      if (localidad.id! > 0) {
+      if (!isEdit) {
+        localidad.latitude = ubicacion!.latitude;
+        localidad.longitude = ubicacion!.longitude;
+        localidad.accuracy = ubicacion!.accuracy;
+        localidad.altitude = ubicacion!.altitude;
+        localidad.heading = ubicacion!.heading;
+        localidad.time = ubicacion!.time;
+        localidad.fecha = DateTime.now();
+      }
+      localidad.departamento = departamento;
+
+      if (isEdit) {
         DB.update(localidad);
       } else {
         localidad.id = null;
@@ -118,40 +152,34 @@ class _FormGPSState extends State<FormGPS> {
     }
   }
 
-  _findLocation() async {
-    Location location = Location();
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-    LocationData _locationData;
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
+  _findLocation(bool isEdit) async {
+    if (!isEdit) {
+      Location location = Location();
+      bool _serviceEnabled;
+      PermissionStatus _permissionGranted;
+      LocationData _locationData;
+      _serviceEnabled = await location.serviceEnabled();
       if (!_serviceEnabled) {
-        return;
+        _serviceEnabled = await location.requestService();
+        if (!_serviceEnabled) {
+          return;
+        }
       }
-    }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
+      _permissionGranted = await location.hasPermission();
+      if (_permissionGranted == PermissionStatus.denied) {
+        _permissionGranted = await location.requestPermission();
+        if (_permissionGranted != PermissionStatus.granted) {
+          return;
+        }
       }
-    }
 
-    _locationData = await location.getLocation();
-    setState(() {
-      ubicacion = _locationData;
-      _controller.text = _locationData.latitude.toString() +
-          ", " +
-          _locationData.longitude.toString();
-    });
-  }
-
-  void _loadDeptos(String selection) {
-    if (selection.isNotEmpty) {
+      _locationData = await location.getLocation();
       setState(() {
-        municipiosData = municipios[selection];
+        ubicacion = _locationData;
+        _controller_ubicacion.text = _locationData.latitude.toString() +
+            ", " +
+            _locationData.longitude.toString();
       });
     }
   }
