@@ -89,15 +89,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     DB.delete(localidad);
                     cargarLocations();
                   },
-                  child: ListTile(
-                    title: Text(localidad.nombre.toString()),
-                    leading: const Icon(Icons.location_on_outlined, size: 55),
-                    subtitle: Text(localidad.detalle.toString()),
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushNamed("/details", arguments: localidad)
-                          .then((value) => cargarLocations());
-                    },
+                  child: Card(
+                    child: ListTile(
+                      title: Text(localidad.nombre.toString()),
+                      leading: const Icon(Icons.location_on_outlined, size: 55),
+                      subtitle: Text(localidad.detalle.toString()),
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed("/details", arguments: localidad)
+                            .then((value) => cargarLocations());
+                      },
+                    ),
                   ),
                 );
               })),

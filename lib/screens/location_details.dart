@@ -17,7 +17,13 @@ class DetailLocation extends StatelessWidget {
         title: Text(localidad.nombre.toString()),
         elevation: 10,
       ),
-      body: const SafeArea(child: MyDetails()),
+      body: SafeArea(
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+        ListTile(
+          leading: const Icon(Icons.directions_outlined),
+          title: Text(localidad.detalle.toString()),
+        ),
+      ])),
       floatingActionButton: SpeedDial(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
@@ -45,14 +51,5 @@ class DetailLocation extends StatelessWidget {
             ),
           ]),
     );
-  }
-}
-
-class MyDetails extends StatelessWidget {
-  const MyDetails({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center();
   }
 }
