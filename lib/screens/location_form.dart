@@ -20,9 +20,9 @@ class _FormGPSState extends State<FormGPS> {
   late String departamento = "";
   late LocationData? ubicacion;
   late String stringLocation = "";
-  final _controller_ubicacion = TextEditingController();
-  final _controller_depto = TextEditingController();
-  String current_depto = "";
+  final controllerUbicacion = TextEditingController();
+  final controllerDepto = TextEditingController();
+  String currentDepto = "";
   bool isEdit = false;
   bool isEditing = false;
 
@@ -35,9 +35,9 @@ class _FormGPSState extends State<FormGPS> {
     bool isDark = brightnessValue == Brightness.dark;
 
     if (!isEditing) {
-      _controller_ubicacion.text =
+      controllerUbicacion.text =
           localidad.latitude.toString() + ", " + localidad.longitude.toString();
-      _controller_depto.text = localidad.departamento!;
+      controllerDepto.text = localidad.departamento!;
     }
     isEdit = ((localidad.id! > 0)) ? true : false;
     late String accion = (isEdit) ? "Editar Dirección" : "Agregar Dirección";
@@ -85,9 +85,9 @@ class _FormGPSState extends State<FormGPS> {
                       decoration: const InputDecoration(
                           labelText: "Departamento",
                           icon: Icon(Icons.location_city_outlined)),
-                      controller: _controller_depto,
+                      controller: controllerDepto,
                       suggestions: departamentos,
-                      textChanged: (text) => current_depto = text,
+                      textChanged: (text) => currentDepto = text,
                       clearOnSubmit: false,
                       textSubmitted: (text) => setState(() {
                         if (text != "") {
@@ -97,7 +97,7 @@ class _FormGPSState extends State<FormGPS> {
                       }),
                     ),
                     TextFormField(
-                        controller: _controller_ubicacion,
+                        controller: controllerUbicacion,
                         readOnly: true,
                         decoration: const InputDecoration(
                             labelText: "Lolcalización",
@@ -128,8 +128,8 @@ class _FormGPSState extends State<FormGPS> {
 
   @override
   void dispose() {
-    _controller_ubicacion.dispose();
-    _controller_depto.dispose();
+    controllerUbicacion.dispose();
+    controllerDepto.dispose();
     super.dispose();
   }
 
@@ -184,7 +184,7 @@ class _FormGPSState extends State<FormGPS> {
       _locationData = await location.getLocation();
       setState(() {
         ubicacion = _locationData;
-        _controller_ubicacion.text = _locationData.latitude.toString() +
+        controllerUbicacion.text = _locationData.latitude.toString() +
             ", " +
             _locationData.longitude.toString();
         isEditing = true;

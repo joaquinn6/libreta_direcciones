@@ -34,7 +34,7 @@ class DetailLocation extends StatelessWidget {
                   googleApiKey: "AIzaSyDUDgMaA3eOZIK7Kg__BPUNZ-Gxqlp_FQY",
                   markers: <Marker>[
                     Marker(
-                      color: Colors.lightBlue,
+                      color: const Color(0xFF3C6448),
                       locations: [
                         Location(localidad.latitude!, localidad.longitude!),
                       ],

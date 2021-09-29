@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.libreta_de_ubicaciones">
    <application
-        android:label="libreta_de_ubicaciones"
+        android:label="My Points"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

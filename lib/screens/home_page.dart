@@ -30,7 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
               closeSearchOnSuffixTap: true,
               helpText: "Buscar...",
               color:
-                  (isDark) ? const Color(0x00535353) : const Color(0xFFB5EDB3),
+                  (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
               style: TextStyle(color: (isDark) ? Colors.white : Colors.black),
               textController: textController,
               onSuffixTap: () {

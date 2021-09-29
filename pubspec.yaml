@@ -41,11 +41,18 @@ dependencies:
   autocomplete_textfield_ns: ^2.0.0
   url_launcher: ^6.0.12
   google_static_maps_controller: ^0.6.0
+  flutter_launcher_icons: ^0.7.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+
+  
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
