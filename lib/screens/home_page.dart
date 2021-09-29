@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               }),
         ],
-        elevation: 5.0,
+        elevation: 2.0,
       ),
       body: SafeArea(
           child: ListView.separated(
@@ -46,50 +46,51 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: localidades.length,
               itemBuilder: (BuildContext context, int index) {
                 final localidad = localidades[index];
-                return Dismissible(
-                  key: Key(localidad.id.toString()),
-                  background: Container(
-                    color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Row(
-                        children: const <Widget>[
-                          Icon(Icons.delete_outline, color: Colors.white),
-                          Text('Eliminar',
-                              style: TextStyle(color: Colors.white)),
-                        ],
+                return Card(
+                  child: Dismissible(
+                    key: Key(localidad.id.toString()),
+                    background: Container(
+                      color: Colors.red,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Row(
+                          children: const <Widget>[
+                            Icon(Icons.delete_outline, color: Colors.white),
+                            Text('Eliminar',
+                                style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  confirmDismiss: (DismissDirection direction) async {
-                    return await showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Confirmación"),
-                          content: const Text(
-                              "Seguro que desea eliminar esta Dirección"),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(false),
-                              child: const Text("Cancelar"),
-                            ),
-                            ElevatedButton(
+                    confirmDismiss: (DismissDirection direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Confirmación"),
+                            content: const Text(
+                                "Seguro que desea eliminar esta Dirección"),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            actions: <Widget>[
+                              TextButton(
                                 onPressed: () =>
-                                    Navigator.of(context).pop(true),
-                                child: const Text("Eliminar")),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  onDismissed: (direction) {
-                    DB.delete(localidad);
-                    cargarLocations();
-                  },
-                  child: Card(
+                                    Navigator.of(context).pop(false),
+                                child: const Text("Cancelar"),
+                              ),
+                              ElevatedButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
+                                  child: const Text("Eliminar")),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    onDismissed: (direction) {
+                      DB.delete(localidad);
+                      cargarLocations();
+                    },
                     child: ListTile(
                       title: Text(localidad.nombre.toString()),
                       leading: const Icon(Icons.location_on_outlined, size: 55),

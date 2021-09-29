@@ -36,16 +36,15 @@ class _FormGPSState extends State<FormGPS> {
 
     if (!isEditing) {
       _controller_ubicacion.text =
-          localidad.latitude.toString() + "," + localidad.longitude.toString();
+          localidad.latitude.toString() + ", " + localidad.longitude.toString();
       _controller_depto.text = localidad.departamento!;
     }
-    //TO DO: colocar el depto y la localizacion con los controller y poner un if por si se debe colocar en el rebuild o no
     isEdit = ((localidad.id! > 0)) ? true : false;
     late String accion = (isEdit) ? "Editar Dirección" : "Agregar Dirección";
     return Scaffold(
       appBar: AppBar(
         title: Text(accion.toString()),
-        elevation: 10,
+        elevation: 2.0,
       ),
       body: SafeArea(
           child: Padding(
