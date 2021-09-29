@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_static_maps_controller/google_static_maps_controller.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,13 +26,20 @@ class DetailLocation extends StatelessWidget {
               title: Text(localidad.nombre.toString()),
               subtitle: Text(localidad.detalle.toString())),
           SizedBox(
-            height: 200.0,
-            child: Ink.image(
-              image: const NetworkImage(
-                  'https://source.unsplash.com/random/800x600?house'),
-              fit: BoxFit.cover,
-            ),
-          ),
+              height: 200.0,
+              child: StaticMap(
+                  width: 400,
+                  height: 200,
+                  scaleToDevicePixelRatio: true,
+                  googleApiKey: "AIzaSyDUDgMaA3eOZIK7Kg__BPUNZ-Gxqlp_FQY",
+                  markers: <Marker>[
+                    Marker(
+                      color: Colors.lightBlue,
+                      locations: [
+                        Location(localidad.latitude!, localidad.longitude!),
+                      ],
+                    ),
+                  ])),
           Container(
             padding: const EdgeInsets.all(16.0),
             alignment: Alignment.centerLeft,

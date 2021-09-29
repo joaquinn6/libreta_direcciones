@@ -40,6 +40,7 @@ dependencies:
   location: ^4.3.0
   autocomplete_textfield_ns: ^2.0.0
   url_launcher: ^6.0.12
+  google_static_maps_controller: ^0.6.0
 
 dev_dependencies:
   flutter_test:
