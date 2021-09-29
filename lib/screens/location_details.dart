@@ -19,12 +19,26 @@ class DetailLocation extends StatelessWidget {
         elevation: 2.0,
       ),
       body: SafeArea(
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-        ListTile(
-          leading: const Icon(Icons.directions_outlined),
-          title: Text(localidad.detalle.toString()),
-        ),
-      ])),
+          child: Card(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(
+              title: Text(localidad.nombre.toString()),
+              subtitle: Text(localidad.detalle.toString())),
+          SizedBox(
+            height: 200.0,
+            child: Ink.image(
+              image: const NetworkImage(
+                  'https://source.unsplash.com/random/800x600?house'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            alignment: Alignment.centerLeft,
+            child: Text(localidad.departamento!),
+          ),
+        ]),
+      )),
       floatingActionButton: SpeedDial(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),

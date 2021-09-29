@@ -137,8 +137,4 @@ class _MyHomePageState extends State<MyHomePage> {
       localidades = auxLocation;
     });
   }
-
-  void _printLatestValue() {
-    print('Second text field: ${textController.text}');
-  }
 }
