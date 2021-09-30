@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:google_static_maps_controller/google_static_maps_controller.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
@@ -26,20 +27,37 @@ class DetailLocation extends StatelessWidget {
               title: Text(localidad.nombre.toString()),
               subtitle: Text(localidad.detalle.toString())),
           SizedBox(
-              height: 200.0,
-              child: StaticMap(
-                  width: 400,
-                  height: 200,
-                  scaleToDevicePixelRatio: true,
-                  googleApiKey: "AIzaSyDUDgMaA3eOZIK7Kg__BPUNZ-Gxqlp_FQY",
-                  markers: <Marker>[
-                    Marker(
-                      color: (isDark) ? Color(0xFF3C6448) : Color(0xFFB5EDB3),
-                      locations: [
-                        Location(localidad.latitude!, localidad.longitude!),
-                      ],
-                    ),
-                  ])),
+              height: 400.0,
+              child: FlutterMap(
+                options: MapOptions(
+                  center: LatLng(localidad.latitude!, localidad.longitude!),
+                  zoom: 15.0,
+                ),
+                layers: [
+                  TileLayerOptions(
+                    urlTemplate:
+                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    subdomains: ['a', 'b', 'c'],
+                    attributionBuilder: (_) {
+                      return Text("© OpenStreetMap contributors");
+                    },
+                  ),
+                  MarkerLayerOptions(
+                    markers: [
+                      Marker(
+                        width: 90.0,
+                        height: 90.0,
+                        point:
+                            LatLng(localidad.latitude!, localidad.longitude!),
+                        builder: (ctx) => Container(
+                          child: Icon(Icons.location_pin,
+                              color: Color(0xFF3C6448)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
           Container(
             padding: const EdgeInsets.all(16.0),
             alignment: Alignment.centerLeft,
