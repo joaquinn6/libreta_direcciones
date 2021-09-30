@@ -2,7 +2,7 @@
     package="com.example.libreta_de_ubicaciones">
    <application
         android:label="My Points"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
