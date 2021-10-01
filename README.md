@@ -1,16 +1,2 @@
-# libreta_de_ubicaciones
+Este es un proyecto basado en la necesidad de las personas que necesitan almacenar las direcciones que visitan para luego volver a ellas, como un vendedor, promotor, etc. De esta forma tendra de manera centralizada todas su direcciones y podra dirigirse a ellas por medio de Google Maps, Waze o Moovit segun su necesidad y preferencia. 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
