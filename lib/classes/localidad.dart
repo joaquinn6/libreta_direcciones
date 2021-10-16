@@ -48,4 +48,23 @@ class Localidad {
       'favorito': favorito
     };
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'nombre': nombre,
+      'detalle': detalle,
+      'latitude': latitude,
+      'longitude': longitude,
+      'accuracy': accuracy,
+      'altitude': altitude,
+      'heading': heading,
+      'time': time,
+      'fecha': fecha!.toString(),
+      'pais': pais,
+      'departamento': departamento,
+      'municipio': municipio,
+      'favorito': favorito
+    };
+  }
 }

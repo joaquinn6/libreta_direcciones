@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/services.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'dart:convert';
 import '../db.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -52,10 +55,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             leading: Icon(Icons.share_outlined),
             title: Text('Compartir'),
+            subtitle: Text('Guarda o comparte tus locaciones'),
+            onTap: () {
+              saveLocations();
+            },
           ),
           ListTile(
             leading: Icon(Icons.import_export_outlined),
             title: Text('Importar'),
+            subtitle: Text('Recupera tus localidades'),
+            onTap: () {
+              importLocatios();
+            },
           ),
         ],
       )),
@@ -213,4 +224,17 @@ class _MyHomePageState extends State<MyHomePage> {
       localidades = auxLocation;
     });
   }
+
+  void saveLocations() async {
+    List<Localidad> locasiones = await DB.localidades("");
+    String jsonLocasiones = jsonEncode(locasiones);
+
+    DateTime fecha = DateTime.now();
+
+    Directory directory = await getApplicationDocumentsDirectory();
+    File file = File('${directory.path}/mypoints_${fecha.toString()}.json');
+    await file.writeAsString(jsonLocasiones);
+  }
 }
+
+void importLocatios() {}

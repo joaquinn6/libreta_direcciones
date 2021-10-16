@@ -74,4 +74,12 @@ class DB {
           favorito: (locationsMap[i]['favorito'] == 0) ? false : true),
     );
   }
+
+  static Future<List<Map<String, dynamic>>> localidadesMap() async {
+    Database database = await _openDB();
+    List<Map<String, dynamic>> locationsMap =
+        await database.query("localidades");
+
+    return locationsMap;
+  }
 }
