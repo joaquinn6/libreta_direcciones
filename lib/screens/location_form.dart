@@ -4,6 +4,7 @@ import 'package:libreta_de_ubicaciones/db.dart';
 import 'package:location/location.dart';
 import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+import 'package:flutter/services.dart';
 
 class FormGPS extends StatefulWidget {
   const FormGPS({Key? key}) : super(key: key);
@@ -13,22 +14,18 @@ class FormGPS extends StatefulWidget {
 
 class _FormGPSState extends State<FormGPS> {
   final deptokey = GlobalKey<AutoCompleteTextFieldState<String>>();
-  final munikey = GlobalKey<AutoCompleteTextFieldState<String>>();
   final formkey = GlobalKey<FormState>();
   late Localidad localidad;
   late String nombre = "";
   late String detalle = "";
   late String departamento = "";
-  late String municipio = "";
   late LocationData? ubicacion;
   late String stringLocation = "";
   final controllerDepto = TextEditingController();
-  final controllerMuni = TextEditingController();
   final controllerUbicacion = TextEditingController();
   String currentDepto = "";
   bool isEdit = false;
   bool isEditing = false;
-  List<String> suggestionMunip = List<String>.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +34,11 @@ class _FormGPSState extends State<FormGPS> {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
+        statusBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
 
     if (!isEditing) {
       controllerUbicacion.text =
@@ -97,23 +99,6 @@ class _FormGPSState extends State<FormGPS> {
                         if (text != "") {
                           departamento = text;
                           isEditing = true;
-                          suggestionMunip = municipios[controllerDepto.text]!;
-                        }
-                      }),
-                    ),
-                    SimpleAutoCompleteTextField(
-                      key: munikey,
-                      decoration: const InputDecoration(
-                          labelText: "Municipio",
-                          icon: Icon(Icons.location_city_outlined)),
-                      controller: controllerMuni,
-                      suggestions: suggestionMunip,
-                      textChanged: (text) => currentDepto = text,
-                      clearOnSubmit: false,
-                      textSubmitted: (text) => setState(() {
-                        if (text != "") {
-                          municipio = text;
-                          isEditing = true;
                         }
                       }),
                     ),
@@ -150,24 +135,13 @@ class _FormGPSState extends State<FormGPS> {
   @override
   void initState() {
     super.initState();
-    controllerDepto.addListener(fillMunicipios());
   }
 
   @override
   void dispose() {
     controllerUbicacion.dispose();
     controllerDepto.dispose();
-    controllerMuni.dispose();
     super.dispose();
-  }
-
-  fillMunicipios() {
-    print(controllerDepto.text);
-    /* if (controllerDepto.text != "") {
-      setState(() {
-        suggestionMunip = municipios[controllerDepto.text]!;
-      });
-    } */
   }
 
   void _saveLocation(BuildContext context) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:libreta_de_ubicaciones/screens/location_form.dart';
-
 import 'screens/home_page.dart';
 import 'screens/location_details.dart';
 import 'themes.dart';

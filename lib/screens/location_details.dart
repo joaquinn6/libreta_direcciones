@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter/services.dart';
 
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
@@ -15,6 +16,12 @@ class DetailLocation extends StatelessWidget {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
+        statusBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localidad.nombre.toString()),

@@ -3,6 +3,7 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:flutter/services.dart';
 
 import '../db.dart';
 
@@ -23,6 +24,11 @@ class _MyHomePageState extends State<MyHomePage> {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
+        statusBarColor:
+            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
     return Scaffold(
       appBar: AppBar(
         title: const Text('Libreta de GPS'),
@@ -96,42 +102,44 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: ListTile(
                       title: Text(localidad.nombre.toString()),
-                      leading: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: FlutterMap(
-                          options: MapOptions(
-                            allowPanningOnScrollingParent: false,
-                            enableScrollWheel: false,
-                            allowPanning: false,
-                            center: LatLng(
-                                localidad.latitude!, localidad.longitude!),
-                            zoom: 14.0,
-                          ),
-                          layers: [
-                            TileLayerOptions(
-                              urlTemplate:
-                                  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                              subdomains: ['a', 'b', 'c'],
-                              attributionBuilder: (_) {
-                                return Text("©");
-                              },
+                      leading: ClipOval(
+                        child: SizedBox(
+                          height: 60,
+                          width: 60,
+                          child: FlutterMap(
+                            options: MapOptions(
+                              allowPanningOnScrollingParent: false,
+                              enableScrollWheel: false,
+                              allowPanning: false,
+                              center: LatLng(
+                                  localidad.latitude!, localidad.longitude!),
+                              zoom: 14.0,
                             ),
-                            MarkerLayerOptions(
-                              markers: [
-                                Marker(
-                                  width: 90.0,
-                                  height: 90.0,
-                                  point: LatLng(localidad.latitude!,
-                                      localidad.longitude!),
-                                  builder: (ctx) => Container(
-                                    child: Icon(Icons.location_pin,
-                                        color: Color(0xFF3C6448)),
+                            layers: [
+                              TileLayerOptions(
+                                urlTemplate:
+                                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                                subdomains: ['a', 'b', 'c'],
+                                attributionBuilder: (_) {
+                                  return Text("©");
+                                },
+                              ),
+                              MarkerLayerOptions(
+                                markers: [
+                                  Marker(
+                                    width: 90.0,
+                                    height: 90.0,
+                                    point: LatLng(localidad.latitude!,
+                                        localidad.longitude!),
+                                    builder: (ctx) => Container(
+                                      child: Icon(Icons.location_pin,
+                                          color: Color(0xFF3C6448)),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       subtitle: Text(localidad.detalle.toString()),
