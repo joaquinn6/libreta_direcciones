@@ -30,6 +30,35 @@ class _MyHomePageState extends State<MyHomePage> {
         statusBarColor:
             (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
     return Scaffold(
+      drawer: Drawer(
+          child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color:
+                  (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
+            ),
+            child: Text(
+              'Opciones',
+              style: TextStyle(
+                color: (isDark)
+                    ? const Color(0xFFF6F8F7)
+                    : const Color(0xFF101110),
+                fontSize: 24,
+              ),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.share_outlined),
+            title: Text('Compartir'),
+          ),
+          ListTile(
+            leading: Icon(Icons.import_export_outlined),
+            title: Text('Importar'),
+          ),
+        ],
+      )),
       appBar: AppBar(
         title: const Text('Libreta de GPS'),
         actions: [
