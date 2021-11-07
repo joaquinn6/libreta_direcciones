@@ -11,6 +11,7 @@ import 'dart:convert';
 import '../db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
+import 'package:file_picker/file_picker.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -263,22 +264,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return false;
     }
     return false;
-    /* Permission permission = Permission.manageExternalStorage;
-    PermissionStatus status = await permission.status;
-    print("GrantPermissionStrategy status: $status");
-    if (status.isPermanentlyDenied) {
-      return false;
-    }
-    if (!status.isLimited && !status.isGranted) {
-      final PermissionStatus result = await permission.request();
-      if (!result.isGranted) {
-        return true;
-      }
-    }
-    if (status.isGranted) {
-      return true;
-    }
-    return false; */
   }
 
   Future<String> pathFileName() async {
@@ -292,4 +277,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-void importLocatios() {}
+Future<void> importLocatios() async {
+  File? file = await getFile();
+  if (file != null) {
+    final contents = await file.readAsString();
+    print(contents);
+  }
+}
+
+Future<File?> getFile() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+  if (result != null && result.files.single.path != null) {
+    String? path = result.files.single.path;
+    return File(path!);
+  }
+  return null;
+}
