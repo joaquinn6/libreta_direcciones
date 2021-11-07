@@ -35,11 +35,8 @@ class _FormGPSState extends State<FormGPS> {
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor:
-            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
-        statusBarColor:
-            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
-
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent));
     if (!isEditing) {
       controllerUbicacion.text =
           localidad.latitude.toString() + ", " + localidad.longitude.toString();

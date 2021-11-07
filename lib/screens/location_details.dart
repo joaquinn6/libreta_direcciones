@@ -17,61 +17,66 @@ class DetailLocation extends StatelessWidget {
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor:
-            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
-        statusBarColor:
-            (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3)));
-
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent));
     return Scaffold(
       appBar: AppBar(
         title: Text(localidad.nombre.toString()),
         elevation: 2.0,
       ),
-      body: SafeArea(
-          child: Card(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          ListTile(
-              title: Text(localidad.nombre.toString()),
-              subtitle: Text(localidad.detalle.toString())),
-          SizedBox(
-              height: 400.0,
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(localidad.latitude!, localidad.longitude!),
-                  zoom: 15.0,
-                ),
-                layers: [
-                  TileLayerOptions(
-                    urlTemplate:
-                        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    subdomains: ['a', 'b', 'c'],
-                    attributionBuilder: (_) {
-                      return Text("© OpenStreetMap contributors");
-                    },
-                  ),
-                  MarkerLayerOptions(
-                    markers: [
-                      Marker(
-                        width: 90.0,
-                        height: 90.0,
-                        point:
+      body: Container(
+        child: Column(
+          children: [
+            ListTile(
+                title: SelectableText(localidad.nombre.toString()),
+                subtitle: SelectableText(localidad.detalle.toString())),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(30),
+              child: Card(
+                elevation: 5.0,
+                child: SizedBox(
+                    height: 400.0,
+                    child: FlutterMap(
+                      options: MapOptions(
+                        center:
                             LatLng(localidad.latitude!, localidad.longitude!),
-                        builder: (ctx) => Container(
-                          child: Icon(Icons.location_pin,
-                              color: Color(0xFF3C6448)),
-                        ),
+                        zoom: 15.0,
                       ),
-                    ],
-                  ),
-                ],
-              )),
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            alignment: Alignment.centerLeft,
-            child: Text(localidad.departamento!),
-          ),
-        ]),
-      )),
+                      layers: [
+                        TileLayerOptions(
+                          urlTemplate:
+                              "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                          subdomains: ['a', 'b', 'c'],
+                          attributionBuilder: (_) {
+                            return Text("© OpenStreetMap contributors");
+                          },
+                        ),
+                        MarkerLayerOptions(
+                          markers: [
+                            Marker(
+                              width: 90.0,
+                              height: 90.0,
+                              point: LatLng(
+                                  localidad.latitude!, localidad.longitude!),
+                              builder: (ctx) => Container(
+                                child: Icon(Icons.location_pin,
+                                    color: Color(0xFF3C6448)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.centerLeft,
+              child: Text(localidad.departamento!),
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: SpeedDial(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
