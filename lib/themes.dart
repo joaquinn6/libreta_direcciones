@@ -19,7 +19,7 @@ ThemeData lightTheme = ThemeData(
   ),
   canvasColor: const Color(0xFFFFFFFF),
   dividerColor: const Color(0x1F559DE0),
-  dialogBackgroundColor: const Color(0xF1FFFFFF),
+  dialogBackgroundColor: const Color(0xE1FFFFFF),
 );
 
 ThemeData darkTheme = ThemeData(

@@ -287,6 +287,7 @@ class _MyHomePageState extends State<MyHomePage> {
             DB.insert(localidad);
           }
           cargarLocations();
+          Navigator.of(context).pop();
         }
       }
     }
