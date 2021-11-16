@@ -274,22 +274,37 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     return '';
   }
-}
 
-Future<void> importLocatios() async {
-  File? file = await getFile();
-  if (file != null) {
-    final contents = await file.readAsString();
-    print(contents);
+  Future<void> importLocatios() async {
+    if (await storagePermission()) {
+      File? file = await getFile();
+
+      if (file != null) {
+        final contents = await file.readAsString();
+        List<Localidad> localidades = listGenerate(contents);
+        if (localidades.length > 0) {
+          for (var localidad in localidades) {
+            DB.insert(localidad);
+          }
+          cargarLocations();
+        }
+      }
+    }
   }
-}
 
-Future<File?> getFile() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  Future<File?> getFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-  if (result != null && result.files.single.path != null) {
-    String? path = result.files.single.path;
-    return File(path!);
+    if (result != null && result.files.single.path != null) {
+      String? path = result.files.single.path;
+      return File(path!);
+    }
+    return null;
   }
-  return null;
+
+  List<Localidad> listGenerate(stringLocalidades) {
+    Iterable jsonLocalidades = jsonDecode(stringLocalidades);
+    return List<Localidad>.from(
+        jsonLocalidades.map((model) => Localidad.fromJson(model)));
+  }
 }

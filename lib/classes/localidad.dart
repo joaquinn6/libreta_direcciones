@@ -67,4 +67,23 @@ class Localidad {
       'favorito': favorito
     };
   }
+
+  static fromJson(model) {
+    Localidad l = new Localidad();
+    l.id = null;
+    l.nombre = model['nombre'];
+    l.detalle = model['detalle'];
+    l.latitude = model['latitude'];
+    l.longitude = model['longitude'];
+    l.accuracy = model['accuracy'];
+    l.altitude = model['altitude'];
+    l.heading = model['heading'];
+    l.time = model['time'];
+    l.fecha = DateTime.now();
+    l.pais = model['pais'];
+    l.departamento = model['departamento'];
+    l.municipio = model['municipio'];
+    l.favorito = model['favorito'];
+    return l;
+  }
 }
