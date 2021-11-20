@@ -16,9 +16,6 @@ class DetailLocation extends StatelessWidget {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.transparent,
-        statusBarColor: Colors.transparent));
     return Scaffold(
       appBar: AppBar(
         title: Text(localidad.nombre.toString()),

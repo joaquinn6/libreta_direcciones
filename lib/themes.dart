@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
@@ -22,6 +23,13 @@ ThemeData lightTheme = ThemeData(
   dividerColor: const Color(0xFFB5EDB3),
   dialogBackgroundColor: const Color(0xE1FFFFFF),
   textTheme: GoogleFonts.rubikTextTheme(),
+  appBarTheme: const AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -47,6 +55,10 @@ ThemeData darkTheme = ThemeData(
     bottomAppBarColor: const Color(0xFF3C6448),
     appBarTheme: const AppBarTheme(
       color: Color(0xFF3C6448),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        statusBarColor: Colors.transparent,
+      ),
     ),
     primaryColor: const Color(0xFF3C6448),
     textTheme: GoogleFonts.rubikTextTheme(
