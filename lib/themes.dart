@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -18,8 +19,9 @@ ThemeData lightTheme = ThemeData(
     },
   ),
   canvasColor: const Color(0xFFFFFFFF),
-  dividerColor: const Color(0x1F559DE0),
+  dividerColor: const Color(0xFFB5EDB3),
   dialogBackgroundColor: const Color(0xE1FFFFFF),
+  textTheme: GoogleFonts.rubikTextTheme(),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -47,4 +49,6 @@ ThemeData darkTheme = ThemeData(
       color: Color(0xFF3C6448),
     ),
     primaryColor: const Color(0xFF3C6448),
+    textTheme: GoogleFonts.rubikTextTheme(
+        ThemeData(brightness: Brightness.dark).textTheme),
     cardColor: const Color(0xE3101011));

@@ -12,6 +12,7 @@ import '../db.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:getwidget/getwidget.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -93,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: SafeArea(
           child: ListView.separated(
-              separatorBuilder: (context, index) => const Divider(height: 0.2),
+              separatorBuilder: (context, index) => const Divider(height: 0.0),
               itemCount: localidades.length,
               itemBuilder: (BuildContext context, int index) {
                 final localidad = localidades[index];
@@ -101,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Dismissible(
                     key: Key(localidad.id.toString()),
                     background: Container(
-                      color: Colors.red,
+                      color: (isDark) ? Color(0xFF8A1506) : Color(0xFFFC2206),
                       child: Padding(
                         padding: const EdgeInsets.all(15),
                         child: Row(
@@ -142,12 +143,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       DB.delete(localidad);
                       cargarLocations();
                     },
-                    child: ListTile(
+                    child: GFListTile(
                       title: Text(localidad.nombre.toString()),
-                      leading: ClipOval(
+                      subTitle: Text(localidad.departamento.toString()),
+                      description: Text(localidad.detalle.toString()),
+                      avatar: ClipOval(
                         child: SizedBox(
-                          height: 60,
-                          width: 60,
+                          height: 75,
+                          width: 75,
                           child: FlutterMap(
                             options: MapOptions(
                               allowPanningOnScrollingParent: false,
@@ -162,9 +165,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 urlTemplate:
                                     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                                 subdomains: ['a', 'b', 'c'],
-                                attributionBuilder: (_) {
-                                  return Text("©");
-                                },
                               ),
                               MarkerLayerOptions(
                                 markers: [
@@ -184,7 +184,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                      subtitle: Text(localidad.detalle.toString()),
                       onTap: () {
                         Navigator.of(context)
                             .pushNamed("/details", arguments: localidad)
