@@ -14,8 +14,6 @@ class FormGPS extends StatefulWidget {
 }
 
 class _FormGPSState extends State<FormGPS> {
-  final deptokey = GlobalKey<AutoCompleteTextFieldState<String>>();
-  final munikey = GlobalKey<AutoCompleteTextFieldState<String>>();
   final formkey = GlobalKey<FormState>();
   late String nombre = "";
   late String detalle = "";
@@ -29,10 +27,6 @@ class _FormGPSState extends State<FormGPS> {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
-    String currentDepto = '';
-    controllerDepto.text = provider.departamento;
-    String currentMuni = '';
-    controllerMuni.text = provider.municipio;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -91,6 +85,8 @@ class _FormGPSState extends State<FormGPS> {
                         controllerDepto,
                         FocusNode fieldFocusNode,
                         VoidCallback onFieldSubmitted) {
+                      controllerDepto.text = provider.departamento;
+
                       return TextField(
                           controller: controllerDepto,
                           focusNode: fieldFocusNode,
@@ -145,6 +141,8 @@ class _FormGPSState extends State<FormGPS> {
                         controllerMuni,
                         FocusNode fieldFocusNode,
                         VoidCallback onFieldSubmitted) {
+                      controllerMuni.text = provider.municipio;
+
                       return TextField(
                           controller: controllerMuni,
                           focusNode: fieldFocusNode,
@@ -211,6 +209,7 @@ class _FormGPSState extends State<FormGPS> {
   @override
   void dispose() {
     controllerDepto.dispose();
+    controllerMuni.dispose();
     super.dispose();
   }
 
