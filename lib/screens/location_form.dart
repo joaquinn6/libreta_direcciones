@@ -5,7 +5,6 @@ import 'package:libreta_de_ubicaciones/db.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
-
 import '../providers/location_provider.dart';
 
 class FormGPS extends StatefulWidget {
@@ -16,12 +15,13 @@ class FormGPS extends StatefulWidget {
 
 class _FormGPSState extends State<FormGPS> {
   final deptokey = GlobalKey<AutoCompleteTextFieldState<String>>();
+  final munikey = GlobalKey<AutoCompleteTextFieldState<String>>();
   final formkey = GlobalKey<FormState>();
   late String nombre = "";
   late String detalle = "";
   late LocationData? ubicacion = null;
-  late String stringLocation = "";
   final controllerDepto = TextEditingController();
+  final controllerMuni = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,71 +31,168 @@ class _FormGPSState extends State<FormGPS> {
     bool isDark = brightnessValue == Brightness.dark;
     String currentDepto = '';
     controllerDepto.text = provider.departamento;
+    String currentMuni = '';
+    controllerMuni.text = provider.municipio;
     return Scaffold(
       appBar: AppBar(
         title: Text(
             (provider.isEditing) ? "Editar Dirección" : "Agregar Dirección"),
         elevation: 2.0,
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-              key: formkey,
-              child: Column(children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Nombre", icon: Icon(Icons.home_outlined)),
-                  onSaved: (value) {
-                    nombre = value!;
-                  },
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLength: 100,
-                  initialValue: (provider.isEditing)
-                      ? provider.localidad!.nombre.toString()
-                      : '',
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Campo requerido";
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                      labelText: "Detalle",
-                      icon: Icon(Icons.directions_outlined)),
-                  initialValue: (provider.isEditing)
-                      ? provider.localidad!.detalle.toString()
-                      : '',
-                  textCapitalization: TextCapitalization.sentences,
-                  maxLength: 500,
-                  maxLines: 5,
-                  minLines: 1,
-                  onSaved: (value) {
-                    detalle = value!;
-                  },
-                ),
-                SimpleAutoCompleteTextField(
-                  key: deptokey,
-                  decoration: const InputDecoration(
-                      labelText: "Departamento",
-                      icon: Icon(Icons.location_city_outlined)),
-                  controller: controllerDepto,
-                  suggestions: departamentos,
-                  textChanged: (text) => currentDepto = text,
-                  clearOnSubmit: false,
-                  textSubmitted: (text) => setState(() {
-                    if (text != "") {
-                      provider.departamento = text;
-                    }
-                  }),
-                ),
-                ElevatedButton(
-                    onPressed: () => _findLocation(provider),
-                    child: const Icon(Icons.location_searching_outlined)),
-                Center(
-                  child: Text(provider.textLocalidad),
-                ),
-              ]))),
+      body: SingleChildScrollView(
+        child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+                key: formkey,
+                child: Column(children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Nombre", icon: Icon(Icons.home_outlined)),
+                    onSaved: (value) {
+                      nombre = value!;
+                    },
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLength: 100,
+                    initialValue: (provider.isEditing)
+                        ? provider.localidad!.nombre.toString()
+                        : '',
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Campo requerido";
+                      }
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Detalle",
+                        icon: Icon(Icons.directions_outlined)),
+                    initialValue: (provider.isEditing)
+                        ? provider.localidad!.detalle.toString()
+                        : '',
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLength: 500,
+                    maxLines: 5,
+                    minLines: 1,
+                    onSaved: (value) {
+                      detalle = value!;
+                    },
+                  ),
+                  Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      return departamentos
+                          .where((String departamento) => departamento
+                              .toLowerCase()
+                              .startsWith(textEditingValue.text.toLowerCase()))
+                          .toList();
+                    },
+                    displayStringForOption: (String departamento) =>
+                        departamento,
+                    fieldViewBuilder: (BuildContext context,
+                        controllerDepto,
+                        FocusNode fieldFocusNode,
+                        VoidCallback onFieldSubmitted) {
+                      return TextField(
+                          controller: controllerDepto,
+                          focusNode: fieldFocusNode,
+                          decoration: const InputDecoration(
+                              labelText: "Departamento",
+                              icon: Icon(Icons.location_city_outlined)));
+                    },
+                    onSelected: (String departamentoSelected) {
+                      provider.departamento = departamentoSelected;
+                      provider.municipio = '';
+                    },
+                    optionsViewBuilder: (BuildContext context,
+                        AutocompleteOnSelected<String> onSelected,
+                        Iterable<String> options) {
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: Material(
+                          child: Container(
+                            width: 300,
+                            height: 150,
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(10.0),
+                              itemCount: options.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final String option = options.elementAt(index);
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    onSelected(option);
+                                  },
+                                  child: ListTile(
+                                    title: Text(option),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  Autocomplete<String>(
+                    optionsBuilder: (TextEditingValue textEditingValue) {
+                      return municipios[provider.departamento]!
+                          .where((String municipio) => municipio
+                              .toLowerCase()
+                              .startsWith(textEditingValue.text.toLowerCase()))
+                          .toList();
+                    },
+                    displayStringForOption: (String municipio) => municipio,
+                    fieldViewBuilder: (BuildContext context,
+                        controllerMuni,
+                        FocusNode fieldFocusNode,
+                        VoidCallback onFieldSubmitted) {
+                      return TextField(
+                          controller: controllerMuni,
+                          focusNode: fieldFocusNode,
+                          decoration: const InputDecoration(
+                              labelText: "Municipio",
+                              icon: Icon(Icons.location_city_outlined)));
+                    },
+                    onSelected: (String municipioSelected) {
+                      provider.municipio = municipioSelected;
+                    },
+                    optionsViewBuilder: (BuildContext context,
+                        AutocompleteOnSelected<String> onSelected,
+                        Iterable<String> options) {
+                      return Align(
+                        alignment: Alignment.topCenter,
+                        child: Material(
+                          child: Container(
+                            width: 300,
+                            height: 150,
+                            child: ListView.builder(
+                              padding: EdgeInsets.all(10.0),
+                              itemCount: options.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final String option = options.elementAt(index);
+
+                                return GestureDetector(
+                                  onTap: () {
+                                    onSelected(option);
+                                  },
+                                  child: ListTile(
+                                    title: Text(option),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  ElevatedButton(
+                      onPressed: () => _findLocation(provider),
+                      child: const Icon(Icons.location_searching_outlined)),
+                  Center(
+                    child: Text(provider.textLocalidad),
+                  ),
+                ]))),
+      ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.save_outlined,
               color: (isDark) ? Colors.white : Colors.black),
@@ -125,6 +222,7 @@ class _FormGPSState extends State<FormGPS> {
       localidad.nombre = nombre;
       localidad.detalle = detalle;
       localidad.departamento = provider.departamento;
+      localidad.municipio = provider.municipio;
       if (ubicacion != null) {
         localidad.latitude = ubicacion!.latitude;
         localidad.longitude = ubicacion!.longitude;

@@ -21,58 +21,62 @@ class DetailLocation extends StatelessWidget {
         title: Text(provider.localidad!.nombre.toString()),
         elevation: 2.0,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            ListTile(
-                title: SelectableText(provider.localidad!.nombre.toString()),
-                subtitle:
-                    SelectableText(provider.localidad!.detalle.toString())),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Card(
-                elevation: 5.0,
-                child: SizedBox(
-                    height: 400.0,
-                    child: FlutterMap(
-                      options: MapOptions(
-                        center: LatLng(provider.localidad!.latitude!,
-                            provider.localidad!.longitude!),
-                        zoom: 15.0,
-                      ),
-                      layers: [
-                        TileLayerOptions(
-                          urlTemplate:
-                              "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                          subdomains: ['a', 'b', 'c'],
-                          attributionBuilder: (_) {
-                            return Text("© OpenStreetMap contributors");
-                          },
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              ListTile(
+                  title: SelectableText(provider.localidad!.nombre.toString()),
+                  subtitle:
+                      SelectableText(provider.localidad!.detalle.toString())),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(30),
+                child: Card(
+                  elevation: 5.0,
+                  child: SizedBox(
+                      height: 400.0,
+                      child: FlutterMap(
+                        options: MapOptions(
+                          center: LatLng(provider.localidad!.latitude!,
+                              provider.localidad!.longitude!),
+                          zoom: 15.0,
                         ),
-                        MarkerLayerOptions(
-                          markers: [
-                            Marker(
-                              width: 90.0,
-                              height: 90.0,
-                              point: LatLng(provider.localidad!.latitude!,
-                                  provider.localidad!.longitude!),
-                              builder: (ctx) => Container(
-                                child: Icon(Icons.location_pin,
-                                    color: Color(0xFF3C6448)),
+                        layers: [
+                          TileLayerOptions(
+                            urlTemplate:
+                                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            subdomains: ['a', 'b', 'c'],
+                            attributionBuilder: (_) {
+                              return Text("© OpenStreetMap contributors");
+                            },
+                          ),
+                          MarkerLayerOptions(
+                            markers: [
+                              Marker(
+                                width: 90.0,
+                                height: 90.0,
+                                point: LatLng(provider.localidad!.latitude!,
+                                    provider.localidad!.longitude!),
+                                builder: (ctx) => Container(
+                                  child: Icon(Icons.location_pin,
+                                      color: Color(0xFF3C6448)),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )),
+                            ],
+                          ),
+                        ],
+                      )),
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              alignment: Alignment.centerLeft,
-              child: Text(provider.localidad!.departamento!),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                alignment: Alignment.centerLeft,
+                child: Text(provider.localidad!.departamento! +
+                    ' - ' +
+                    provider.localidad!.municipio!),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: SpeedDial(

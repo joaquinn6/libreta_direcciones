@@ -145,7 +145,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     },
                     child: GFListTile(
                       title: Text(localidad.nombre.toString()),
-                      subTitle: Text(localidad.departamento.toString()),
+                      subTitle: Text(localidad.departamento.toString() +
+                          '-' +
+                          localidad.municipio.toString()),
                       description: Text(localidad.detalle.toString()),
                       avatar: ClipOval(
                         child: SizedBox(
@@ -203,6 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
             provider.isEditing = false;
             provider.textLocalidad = '';
             provider.departamento = '';
+            provider.municipio = '';
             Navigator.of(context)
                 .pushNamed("/form")
                 .then((value) => cargarLocations());
