@@ -1,10 +1,10 @@
 import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
+import '../providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
-import '../providers/location_provider.dart';
 
 class FormGPS extends StatefulWidget {
   const FormGPS({Key? key}) : super(key: key);
@@ -72,114 +72,73 @@ class _FormGPSState extends State<FormGPS> {
                   ),
                   Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return const Iterable<String>.empty();
+                      }
                       return departamentos
                           .where((String departamento) => departamento
                               .toLowerCase()
                               .startsWith(textEditingValue.text.toLowerCase()))
                           .toList();
                     },
-                    displayStringForOption: (String departamento) =>
-                        departamento,
                     fieldViewBuilder: (BuildContext context,
                         controllerDepto,
                         FocusNode fieldFocusNode,
                         VoidCallback onFieldSubmitted) {
                       controllerDepto.text = provider.departamento;
-
                       return TextField(
-                          controller: controllerDepto,
-                          focusNode: fieldFocusNode,
-                          decoration: const InputDecoration(
-                              labelText: "Departamento",
-                              icon: Icon(Icons.location_city_outlined)));
+                        controller: controllerDepto,
+                        focusNode: fieldFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: const InputDecoration(
+                            labelText: "Departamento",
+                            icon: Icon(Icons.location_city_outlined)),
+                        onChanged: (value) => {
+                          if (value == '')
+                            {
+                              provider.departamento = '',
+                            }
+                        },
+                      );
                     },
                     onSelected: (String departamentoSelected) {
                       provider.departamento = departamentoSelected;
                       provider.municipio = '';
                     },
-                    optionsViewBuilder: (BuildContext context,
-                        AutocompleteOnSelected<String> onSelected,
-                        Iterable<String> options) {
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: Material(
-                          child: Container(
-                            width: 300,
-                            height: 150,
-                            child: ListView.builder(
-                              padding: EdgeInsets.all(10.0),
-                              itemCount: options.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final String option = options.elementAt(index);
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    onSelected(option);
-                                  },
-                                  child: ListTile(
-                                    title: Text(option),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    },
                   ),
                   Autocomplete<String>(
                     optionsBuilder: (TextEditingValue textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return const Iterable<String>.empty();
+                      }
                       return municipios[provider.departamento]!
                           .where((String municipio) => municipio
                               .toLowerCase()
                               .startsWith(textEditingValue.text.toLowerCase()))
                           .toList();
                     },
-                    displayStringForOption: (String municipio) => municipio,
                     fieldViewBuilder: (BuildContext context,
                         controllerMuni,
                         FocusNode fieldFocusNode,
                         VoidCallback onFieldSubmitted) {
                       controllerMuni.text = provider.municipio;
-
                       return TextField(
-                          controller: controllerMuni,
-                          focusNode: fieldFocusNode,
-                          decoration: const InputDecoration(
-                              labelText: "Municipio",
-                              icon: Icon(Icons.location_city_outlined)));
+                        controller: controllerMuni,
+                        focusNode: fieldFocusNode,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: const InputDecoration(
+                            labelText: "Municipio",
+                            icon: Icon(Icons.location_city_outlined)),
+                        onChanged: (value) => {
+                          if (value == '')
+                            {
+                              provider.municipio = '',
+                            }
+                        },
+                      );
                     },
                     onSelected: (String municipioSelected) {
                       provider.municipio = municipioSelected;
-                    },
-                    optionsViewBuilder: (BuildContext context,
-                        AutocompleteOnSelected<String> onSelected,
-                        Iterable<String> options) {
-                      return Align(
-                        alignment: Alignment.topCenter,
-                        child: Material(
-                          child: Container(
-                            width: 300,
-                            height: 150,
-                            child: ListView.builder(
-                              padding: EdgeInsets.all(10.0),
-                              itemCount: options.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final String option = options.elementAt(index);
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    onSelected(option);
-                                  },
-                                  child: ListTile(
-                                    title: Text(option),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      );
                     },
                   ),
                   ElevatedButton(
@@ -256,7 +215,6 @@ class _FormGPSState extends State<FormGPS> {
     Location location = Location();
 
     if (await locationPermission(location) && await locationService(location)) {
-      location.changeSettings(accuracy: LocationAccuracy.low);
       LocationData _locationData;
       _locationData = await location.getLocation();
       provider.textLocalidad = _locationData.latitude.toString() +

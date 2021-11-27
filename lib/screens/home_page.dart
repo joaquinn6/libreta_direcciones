@@ -79,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           AnimSearchBar(
               width: 250.0,
               closeSearchOnSuffixTap: true,
+              autoFocus: true,
               helpText: "Buscar...",
               color:
                   (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),

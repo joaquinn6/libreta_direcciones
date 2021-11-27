@@ -206,4 +206,5 @@ const Map<String, List<String>> municipios = {
     'Nueva Guinea',
     'Paiwas',
   ],
+  '': <String>[],
 };

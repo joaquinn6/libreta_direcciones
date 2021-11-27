@@ -30,6 +30,9 @@ ThemeData lightTheme = ThemeData(
       statusBarColor: Colors.transparent,
     ),
   ),
+  iconTheme: const IconThemeData(
+    color: Colors.black,
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -49,7 +52,7 @@ ThemeData darkTheme = ThemeData(
         900: Color(0xFF0E062F)
       },
     ),
-    canvasColor: const Color(0x34101011),
+    canvasColor: Color.fromARGB(207, 16, 16, 17),
     dividerColor: const Color(0xEE578D80),
     dialogBackgroundColor: const Color(0xD0101011),
     bottomAppBarColor: const Color(0xFF3C6448),
@@ -58,7 +61,11 @@ ThemeData darkTheme = ThemeData(
       systemOverlayStyle: SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
         statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
       ),
+    ),
+    iconTheme: const IconThemeData(
+      color: Colors.white,
     ),
     primaryColor: const Color(0xFF3C6448),
     textTheme: GoogleFonts.rubikTextTheme(
