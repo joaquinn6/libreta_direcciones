@@ -1,32 +1,33 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:libreta_de_ubicaciones/providers/location_provider.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Localidad localidad =
-        ModalRoute.of(context)!.settings.arguments as Localidad;
+    final provider = Provider.of<LocalidadProvider>(context);
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(localidad.nombre.toString()),
+        title: Text(provider.localidad!.nombre.toString()),
         elevation: 2.0,
       ),
       body: Container(
         child: Column(
           children: [
             ListTile(
-                title: SelectableText(localidad.nombre.toString()),
-                subtitle: SelectableText(localidad.detalle.toString())),
+                title: SelectableText(provider.localidad!.nombre.toString()),
+                subtitle:
+                    SelectableText(provider.localidad!.detalle.toString())),
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Card(
@@ -35,8 +36,8 @@ class DetailLocation extends StatelessWidget {
                     height: 400.0,
                     child: FlutterMap(
                       options: MapOptions(
-                        center:
-                            LatLng(localidad.latitude!, localidad.longitude!),
+                        center: LatLng(provider.localidad!.latitude!,
+                            provider.localidad!.longitude!),
                         zoom: 15.0,
                       ),
                       layers: [
@@ -53,8 +54,8 @@ class DetailLocation extends StatelessWidget {
                             Marker(
                               width: 90.0,
                               height: 90.0,
-                              point: LatLng(
-                                  localidad.latitude!, localidad.longitude!),
+                              point: LatLng(provider.localidad!.latitude!,
+                                  provider.localidad!.longitude!),
                               builder: (ctx) => Container(
                                 child: Icon(Icons.location_pin,
                                     color: Color(0xFF3C6448)),
@@ -69,7 +70,7 @@ class DetailLocation extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16.0),
               alignment: Alignment.centerLeft,
-              child: Text(localidad.departamento!),
+              child: Text(provider.localidad!.departamento!),
             ),
           ],
         ),
@@ -88,9 +89,8 @@ class DetailLocation extends StatelessWidget {
                   color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xAAC3F5E4),
               onTap: () {
-                Navigator.of(context)
-                    .pushNamed("/form", arguments: localidad)
-                    .then((value) => Navigator.pop(context));
+                provider.isEditing = true;
+                Navigator.of(context).pushNamed("/form");
               },
             ),
             SpeedDialChild(
@@ -99,7 +99,8 @@ class DetailLocation extends StatelessWidget {
                   color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xFF3AD6CE),
               onTap: () {
-                launchWaze(localidad.latitude, localidad.longitude);
+                launchWaze(provider.localidad!.latitude,
+                    provider.localidad!.longitude);
               },
             ),
             SpeedDialChild(
@@ -108,7 +109,8 @@ class DetailLocation extends StatelessWidget {
                   color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xFF3E938F),
               onTap: () {
-                launchMaps(localidad.latitude, localidad.longitude);
+                launchMaps(provider.localidad!.latitude,
+                    provider.localidad!.longitude);
               },
             ),
             SpeedDialChild(
@@ -117,7 +119,8 @@ class DetailLocation extends StatelessWidget {
                   color: (isDark) ? Colors.white : Colors.black),
               backgroundColor: const Color(0xFFF89F2B),
               onTap: () {
-                launchMoovit(localidad.latitude, localidad.longitude);
+                launchMoovit(provider.localidad!.latitude,
+                    provider.localidad!.longitude);
               },
             )
           ]),

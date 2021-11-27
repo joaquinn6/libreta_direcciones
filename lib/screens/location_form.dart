@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
+import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
+import 'package:provider/provider.dart';
 import 'package:location/location.dart';
-import 'package:libreta_de_ubicaciones/static/static_lists.dart';
-import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+
+import '../providers/location_provider.dart';
 
 class FormGPS extends StatefulWidget {
   const FormGPS({Key? key}) : super(key: key);
@@ -15,113 +17,91 @@ class FormGPS extends StatefulWidget {
 class _FormGPSState extends State<FormGPS> {
   final deptokey = GlobalKey<AutoCompleteTextFieldState<String>>();
   final formkey = GlobalKey<FormState>();
-  late Localidad localidad;
   late String nombre = "";
   late String detalle = "";
-  late String departamento = "";
-  late LocationData? ubicacion;
+  late LocationData? ubicacion = null;
   late String stringLocation = "";
   final controllerDepto = TextEditingController();
-  final controllerUbicacion = TextEditingController();
-  String currentDepto = "";
-  bool isEdit = false;
-  bool isEditing = false;
 
   @override
   Widget build(BuildContext context) {
-    localidad = ModalRoute.of(context)!.settings.arguments as Localidad;
-
+    final provider = Provider.of<LocalidadProvider>(context);
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
-    if (!isEditing) {
-      controllerUbicacion.text =
-          localidad.latitude.toString() + ", " + localidad.longitude.toString();
-      controllerDepto.text = localidad.departamento!;
-    }
-    isEdit = ((localidad.id! > 0)) ? true : false;
-    late String accion = (isEdit) ? "Editar Dirección" : "Agregar Dirección";
+    String currentDepto = '';
+    controllerDepto.text = provider.departamento;
     return Scaffold(
       appBar: AppBar(
-        title: Text(accion.toString()),
+        title: Text(
+            (provider.isEditing) ? "Editar Dirección" : "Agregar Dirección"),
         elevation: 2.0,
       ),
-      body: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                  key: formkey,
-                  child: Column(children: [
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Nombre", icon: Icon(Icons.home_outlined)),
-                      onSaved: (value) {
-                        nombre = value!;
-                      },
-                      textCapitalization: TextCapitalization.sentences,
-                      maxLength: 100,
-                      initialValue: localidad.nombre.toString(),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Campo requerido";
-                        }
-                      },
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          labelText: "Detalle",
-                          icon: Icon(Icons.directions_outlined)),
-                      initialValue: localidad.detalle.toString(),
-                      textCapitalization: TextCapitalization.sentences,
-                      maxLength: 500,
-                      maxLines: 5,
-                      minLines: 1,
-                      onSaved: (value) {
-                        detalle = value!;
-                      },
-                    ),
-                    SimpleAutoCompleteTextField(
-                      key: deptokey,
-                      decoration: const InputDecoration(
-                          labelText: "Departamento",
-                          icon: Icon(Icons.location_city_outlined)),
-                      controller: controllerDepto,
-                      suggestions: departamentos,
-                      textChanged: (text) => currentDepto = text,
-                      clearOnSubmit: false,
-                      textSubmitted: (text) => setState(() {
-                        if (text != "") {
-                          departamento = text;
-                          isEditing = true;
-                        }
-                      }),
-                    ),
-                    TextFormField(
-                        controller: controllerUbicacion,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                            labelText: "Lolcalización",
-                            icon: Icon(Icons.location_on_outlined)),
-                        maxLines: 5,
-                        minLines: 1,
-                        validator: (value) {
-                          if (value!.isEmpty || value == "0.0, 0.0") {
-                            return "Campo requerido, presione el boton";
-                          }
-                        },
-                        onSaved: (value) {
-                          stringLocation = value!;
-                        }),
-                    ElevatedButton(
-                        onPressed: () => _findLocation(isEdit),
-                        child: const Icon(Icons.location_searching_outlined)),
-                  ])))),
+      body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+              key: formkey,
+              child: Column(children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                      labelText: "Nombre", icon: Icon(Icons.home_outlined)),
+                  onSaved: (value) {
+                    nombre = value!;
+                  },
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLength: 100,
+                  initialValue: (provider.isEditing)
+                      ? provider.localidad!.nombre.toString()
+                      : '',
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Campo requerido";
+                    }
+                  },
+                ),
+                TextFormField(
+                  decoration: const InputDecoration(
+                      labelText: "Detalle",
+                      icon: Icon(Icons.directions_outlined)),
+                  initialValue: (provider.isEditing)
+                      ? provider.localidad!.detalle.toString()
+                      : '',
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLength: 500,
+                  maxLines: 5,
+                  minLines: 1,
+                  onSaved: (value) {
+                    detalle = value!;
+                  },
+                ),
+                SimpleAutoCompleteTextField(
+                  key: deptokey,
+                  decoration: const InputDecoration(
+                      labelText: "Departamento",
+                      icon: Icon(Icons.location_city_outlined)),
+                  controller: controllerDepto,
+                  suggestions: departamentos,
+                  textChanged: (text) => currentDepto = text,
+                  clearOnSubmit: false,
+                  textSubmitted: (text) => setState(() {
+                    if (text != "") {
+                      provider.departamento = text;
+                    }
+                  }),
+                ),
+                ElevatedButton(
+                    onPressed: () => _findLocation(provider),
+                    child: const Icon(Icons.location_searching_outlined)),
+                Center(
+                  child: Text(provider.textLocalidad),
+                ),
+              ]))),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.save_outlined,
               color: (isDark) ? Colors.white : Colors.black),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
-            _saveLocation(context);
+            _saveLocation(context, provider);
           }),
     );
   }
@@ -133,67 +113,86 @@ class _FormGPSState extends State<FormGPS> {
 
   @override
   void dispose() {
-    controllerUbicacion.dispose();
     controllerDepto.dispose();
     super.dispose();
   }
 
-  void _saveLocation(BuildContext context) {
+  void _saveLocation(BuildContext context, provider) {
+    Localidad localidad = Localidad();
+
     if (formkey.currentState!.validate()) {
       formkey.currentState!.save();
       localidad.nombre = nombre;
       localidad.detalle = detalle;
-      if (!isEdit) {
+      localidad.departamento = provider.departamento;
+      if (ubicacion != null) {
         localidad.latitude = ubicacion!.latitude;
         localidad.longitude = ubicacion!.longitude;
         localidad.accuracy = ubicacion!.accuracy;
         localidad.altitude = ubicacion!.altitude;
         localidad.heading = ubicacion!.heading;
         localidad.time = ubicacion!.time;
-        localidad.fecha = DateTime.now();
+      } else if (provider.isEditing) {
+        localidad.latitude = provider.localidad!.latitude;
+        localidad.longitude = provider.localidad!.longitude;
+        localidad.accuracy = provider.localidad!.accuracy;
+        localidad.altitude = provider.localidad!.altitude;
+        localidad.heading = provider.localidad!.heading;
+        localidad.time = provider.localidad!.time;
+      } else {
+        return;
       }
-      localidad.departamento = departamento;
-
-      if (isEdit) {
+      if (provider.isEditing) {
+        localidad.id = provider.localidad!.id;
+        localidad.fecha = provider.localidad!.fecha;
         DB.update(localidad);
       } else {
-        localidad.id = null;
+        localidad.fecha = DateTime.now();
         DB.insert(localidad);
       }
+      provider.isEditing = false;
+      provider.localidad = localidad;
       Navigator.pop(context);
     }
   }
 
-  _findLocation(bool isEdit) async {
-    if (!isEdit) {
-      Location location = Location();
-      bool _serviceEnabled;
-      PermissionStatus _permissionGranted;
+  _findLocation(provider) async {
+    Location location = Location();
+
+    if (await locationPermission(location) && await locationService(location)) {
+      location.changeSettings(accuracy: LocationAccuracy.low);
       LocationData _locationData;
-      _serviceEnabled = await location.serviceEnabled();
-      if (!_serviceEnabled) {
-        _serviceEnabled = await location.requestService();
-        if (!_serviceEnabled) {
-          return;
-        }
-      }
-
-      _permissionGranted = await location.hasPermission();
-      if (_permissionGranted == PermissionStatus.denied) {
-        _permissionGranted = await location.requestPermission();
-        if (_permissionGranted != PermissionStatus.granted) {
-          return;
-        }
-      }
-
       _locationData = await location.getLocation();
+      provider.textLocalidad = _locationData.latitude.toString() +
+          ", " +
+          _locationData.longitude.toString();
       setState(() {
         ubicacion = _locationData;
-        controllerUbicacion.text = _locationData.latitude.toString() +
-            ", " +
-            _locationData.longitude.toString();
-        isEditing = true;
       });
     }
+  }
+
+  Future<bool> locationPermission(Location location) async {
+    PermissionStatus _permissionGranted;
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  Future<bool> locationService(Location location) async {
+    bool _serviceEnabled;
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return false;
+      }
+    }
+    return true;
   }
 }

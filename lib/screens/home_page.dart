@@ -1,18 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:convert';
-import '../db.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share/share.dart';
+import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:share/share.dart';
+
+import '../providers/location_provider.dart';
+import '../db.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -28,6 +30,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LocalidadProvider>(context);
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
@@ -182,8 +185,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       onTap: () {
+                        provider.isEditing = false;
+                        provider.localidad = localidad;
                         Navigator.of(context)
-                            .pushNamed("/details", arguments: localidad)
+                            .pushNamed("/details")
                             .then((value) => cargarLocations());
                       },
                     ),
@@ -195,8 +200,11 @@ class _MyHomePageState extends State<MyHomePage> {
               color: (isDark) ? Colors.white : Colors.black),
           backgroundColor: Theme.of(context).primaryColor,
           onPressed: () {
+            provider.isEditing = false;
+            provider.textLocalidad = '';
+            provider.departamento = '';
             Navigator.of(context)
-                .pushNamed("/form", arguments: Localidad())
+                .pushNamed("/form")
                 .then((value) => cargarLocations());
           }),
     );

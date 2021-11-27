@@ -15,7 +15,7 @@ class Localidad {
   bool favorito;
 
   Localidad(
-      {this.id = 0,
+      {this.id,
       this.nombre = "",
       this.detalle = "",
       this.latitude = 0.0,
