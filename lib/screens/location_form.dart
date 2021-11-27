@@ -1,4 +1,3 @@
-import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
