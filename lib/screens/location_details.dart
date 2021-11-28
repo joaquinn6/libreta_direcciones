@@ -79,37 +79,47 @@ class DetailLocation extends StatelessWidget {
         ),
       ),
       floatingActionButton: ExpandableFab(
-        distance: 112.0,
+        distance: 150.0,
         children: [
           ActionButton(
             onPressed: () => {
               launchWaze(
                   provider.localidad!.latitude, provider.localidad!.longitude),
             },
+            tooltiptext: 'Waze',
             icon: Icon(Icons.directions_car_filled_outlined,
-                color: (isDark) ? Colors.white : Colors.black),
+                color: (isDark)
+                    ? Color.fromARGB(255, 0, 158, 158)
+                    : Color.fromARGB(255, 100, 216, 224)),
           ),
           ActionButton(
             onPressed: () => {
               launchMaps(
                   provider.localidad!.latitude, provider.localidad!.longitude),
             },
+            tooltiptext: 'Maps',
             icon: Icon(Icons.directions_car_filled_outlined,
-                color: (isDark) ? Colors.white : Colors.black),
+                color: (isDark)
+                    ? Color.fromARGB(255, 99, 226, 82)
+                    : Color.fromARGB(255, 5, 109, 5)),
           ),
           ActionButton(
             onPressed: () => {
               launchMoovit(
                   provider.localidad!.latitude, provider.localidad!.longitude),
             },
+            tooltiptext: 'Moovit',
             icon: Icon(Icons.directions_bus_filled_outlined,
-                color: (isDark) ? Colors.white : Colors.black),
+                color: (isDark)
+                    ? Color.fromARGB(255, 255, 130, 81)
+                    : Color.fromARGB(255, 153, 58, 4)),
           ),
           ActionButton(
             onPressed: () => {
               provider.isEditing = true,
               Navigator.of(context).pushNamed("/form"),
             },
+            tooltiptext: 'Editar',
             icon: Icon(Icons.edit_outlined,
                 color: (isDark) ? Colors.white : Colors.black),
           ),
@@ -349,9 +359,11 @@ class ActionButton extends StatelessWidget {
     Key? key,
     this.onPressed,
     required this.icon,
+    String this.tooltiptext = '',
   }) : super(key: key);
 
   final VoidCallback? onPressed;
+  final String tooltiptext;
   final Widget icon;
 
   @override
@@ -366,28 +378,8 @@ class ActionButton extends StatelessWidget {
         child: IconButton(
           onPressed: onPressed,
           icon: icon,
+          tooltip: tooltiptext,
         ),
-      ),
-    );
-  }
-}
-
-@immutable
-class FakeItem extends StatelessWidget {
-  const FakeItem({
-    Key? key,
-    required this.isBig,
-  }) : super(key: key);
-
-  final bool isBig;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-      height: isBig ? 128.0 : 36.0,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       ),
     );
   }

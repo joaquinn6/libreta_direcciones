@@ -53,7 +53,7 @@ ThemeData darkTheme = ThemeData(
       },
     ),
     canvasColor: Color.fromARGB(207, 16, 16, 17),
-    dividerColor: const Color(0xEE578D80),
+    dividerColor: Color.fromARGB(237, 64, 105, 96),
     dialogBackgroundColor: const Color(0xD0101011),
     bottomAppBarColor: const Color(0xFF3C6448),
     appBarTheme: const AppBarTheme(
