@@ -112,7 +112,7 @@ class DetailLocation extends StatelessWidget {
             icon: Icon(Icons.directions_bus_filled_outlined,
                 color: (isDark)
                     ? Color.fromARGB(255, 255, 130, 81)
-                    : Color.fromARGB(255, 153, 58, 4)),
+                    : Color.fromARGB(255, 230, 87, 5)),
           ),
           ActionButton(
             onPressed: () => {
@@ -245,12 +245,16 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 
   Widget _buildTapToCloseFab() {
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
+    bool isDark = brightnessValue == Brightness.dark;
     return SizedBox(
       width: 56.0,
       height: 56.0,
       child: Center(
         child: Material(
           shape: const CircleBorder(),
+          color: (isDark) ? Color(0xFF8A1506) : Color(0xFFFC2206),
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
           child: InkWell(
@@ -287,6 +291,9 @@ class _ExpandableFabState extends State<ExpandableFab>
   }
 
   Widget _buildTapToOpenFab() {
+    final Brightness brightnessValue =
+        MediaQuery.of(context).platformBrightness;
+    bool isDark = brightnessValue == Brightness.dark;
     return IgnorePointer(
       ignoring: _open,
       child: AnimatedContainer(
@@ -304,7 +311,9 @@ class _ExpandableFabState extends State<ExpandableFab>
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
             onPressed: _toggle,
-            child: const Icon(Icons.menu),
+            backgroundColor: Theme.of(context).primaryColor,
+            child:
+                Icon(Icons.menu, color: (isDark) ? Colors.white : Colors.black),
           ),
         ),
       ),
