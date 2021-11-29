@@ -93,111 +93,107 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         elevation: 2.0,
       ),
-      body: SafeArea(
-          child: ListView.separated(
-              separatorBuilder: (context, index) => const Divider(height: 0.0),
-              itemCount: localidades.length,
-              itemBuilder: (BuildContext context, int index) {
-                final localidad = localidades[index];
-                return Card(
-                  child: Dismissible(
-                    key: Key(localidad.id.toString()),
-                    background: Container(
-                      color: (isDark) ? Color(0xFF8A1506) : Color(0xFFFC2206),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Row(
-                          children: const <Widget>[
-                            Icon(Icons.delete_outline, color: Colors.white),
-                            Text('Eliminar',
-                                style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
+      body: ListView.separated(
+          separatorBuilder: (context, index) => const Divider(height: 0.0),
+          itemCount: localidades.length,
+          itemBuilder: (BuildContext context, int index) {
+            final localidad = localidades[index];
+            return Card(
+              child: Dismissible(
+                key: Key(localidad.id.toString()),
+                background: Container(
+                  color: (isDark) ? Color(0xFF8A1506) : Color(0xFFFC2206),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
+                      children: const <Widget>[
+                        Icon(Icons.delete_outline, color: Colors.white),
+                        Text('Eliminar', style: TextStyle(color: Colors.white)),
+                      ],
                     ),
-                    confirmDismiss: (DismissDirection direction) async {
-                      return await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text("Confirmación"),
-                            content: const Text(
-                                "Seguro que desea eliminar esta Dirección"),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                                child: const Text("Cancelar"),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(true),
-                                  child: const Text("Eliminar")),
-                            ],
-                          );
-                        },
+                  ),
+                ),
+                confirmDismiss: (DismissDirection direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Confirmación"),
+                        content: const Text(
+                            "Seguro que desea eliminar esta Dirección"),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text("Cancelar"),
+                          ),
+                          ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop(true),
+                              child: const Text("Eliminar")),
+                        ],
                       );
                     },
-                    onDismissed: (direction) {
-                      DB.delete(localidad);
-                      cargarLocations();
-                    },
-                    child: GFListTile(
-                      title: Text(localidad.nombre.toString()),
-                      subTitle: Text(localidad.departamento.toString() +
-                          '-' +
-                          localidad.municipio.toString()),
-                      description: Text(localidad.detalle.toString()),
-                      avatar: ClipOval(
-                        child: SizedBox(
-                          height: 75,
-                          width: 75,
-                          child: FlutterMap(
-                            options: MapOptions(
-                              allowPanningOnScrollingParent: false,
-                              enableScrollWheel: false,
-                              allowPanning: false,
-                              center: LatLng(
-                                  localidad.latitude!, localidad.longitude!),
-                              zoom: 14.0,
-                            ),
-                            layers: [
-                              TileLayerOptions(
-                                urlTemplate:
-                                    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                                subdomains: ['a', 'b', 'c'],
-                              ),
-                              MarkerLayerOptions(
-                                markers: [
-                                  Marker(
-                                    width: 90.0,
-                                    height: 90.0,
-                                    point: LatLng(localidad.latitude!,
-                                        localidad.longitude!),
-                                    builder: (ctx) => Container(
-                                      child: Icon(Icons.location_pin,
-                                          color: Color(0xFF3C6448)),
-                                    ),
-                                  ),
-                                ],
+                  );
+                },
+                onDismissed: (direction) {
+                  DB.delete(localidad);
+                  cargarLocations();
+                },
+                child: GFListTile(
+                  title: Text(localidad.nombre.toString()),
+                  subTitle: Text(localidad.departamento.toString() +
+                      '-' +
+                      localidad.municipio.toString()),
+                  description: Text(localidad.detalle.toString()),
+                  avatar: ClipOval(
+                    child: SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: FlutterMap(
+                        options: MapOptions(
+                          allowPanningOnScrollingParent: false,
+                          enableScrollWheel: false,
+                          allowPanning: false,
+                          center:
+                              LatLng(localidad.latitude!, localidad.longitude!),
+                          zoom: 14.0,
+                        ),
+                        layers: [
+                          TileLayerOptions(
+                            urlTemplate:
+                                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                            subdomains: ['a', 'b', 'c'],
+                          ),
+                          MarkerLayerOptions(
+                            markers: [
+                              Marker(
+                                width: 90.0,
+                                height: 90.0,
+                                point: LatLng(
+                                    localidad.latitude!, localidad.longitude!),
+                                builder: (ctx) => Container(
+                                  child: Icon(Icons.location_pin,
+                                      color: Color(0xFF3C6448)),
+                                ),
                               ),
                             ],
                           ),
-                        ),
+                        ],
                       ),
-                      onTap: () {
-                        provider.isEditing = false;
-                        provider.localidad = localidad;
-                        Navigator.of(context)
-                            .pushNamed("/details")
-                            .then((value) => cargarLocations());
-                      },
                     ),
                   ),
-                );
-              })),
+                  onTap: () {
+                    provider.isEditing = false;
+                    provider.localidad = localidad;
+                    Navigator.of(context)
+                        .pushNamed("/details")
+                        .then((value) => cargarLocations());
+                  },
+                ),
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add_location_alt_outlined,
               color: (isDark) ? Colors.white : Colors.black),
