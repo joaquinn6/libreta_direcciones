@@ -53,7 +53,7 @@ class DB {
     List<Map<String, dynamic>> locationsMap = await database.query((search
             .isEmpty)
         ? "localidades"
-        : "localidades WHERE nombre LIKE '%$search%' or detalle LIKE '%$search%' or departamento LIKE '$search%'");
+        : "localidades WHERE nombre LIKE '%$search%' or detalle LIKE '%$search%' or departamento LIKE '$search%' or municipio LIKE '$search%'");
 
     return List.generate(
       locationsMap.length,
