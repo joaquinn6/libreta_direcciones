@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-Future<bool?> alertDialog(BuildContext context) {
+Future<bool?> alertDialog(
+    {required BuildContext context,
+    required String titulo,
+    required String contenido}) {
   return showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Confirmación"),
-        content: const Text("Seguro que desea eliminar esta Dirección"),
+        title: Text(titulo),
+        content: Text(contenido),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         actions: <Widget>[
           TextButton(

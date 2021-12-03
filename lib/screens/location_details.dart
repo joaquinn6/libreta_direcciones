@@ -139,7 +139,10 @@ class DetailLocation extends StatelessWidget {
           ),
           ActionButton(
             onPressed: () async => {
-              confirm = (await alertDialog(context))!,
+              confirm = (await alertDialog(
+                  context: context,
+                  titulo: "Confirmar",
+                  contenido: "¿Desea eliminar la localidad?"))!,
               if (confirm)
                 {
                   DB.delete(provider.localidad!),

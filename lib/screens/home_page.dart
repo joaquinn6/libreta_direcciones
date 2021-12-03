@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:share/share.dart';
 
+import '../components/snakbar.dart';
 import '../providers/location_provider.dart';
 import '../components/alert_dialog.dart';
 import '../db.dart';
@@ -72,6 +73,14 @@ class _MyHomePageState extends State<MyHomePage> {
               importLocatios();
             },
           ),
+          ListTile(
+            leading: Icon(Icons.delete_outline_rounded),
+            title: Text('Eliminar todo'),
+            subtitle: Text('Elimina todas tus localidades'),
+            onTap: () {
+              eliminarTodo();
+            },
+          ),
         ],
       )),
       appBar: AppBar(
@@ -115,17 +124,28 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 confirmDismiss: (DismissDirection direction) async {
-                  return await alertDialog(context);
+                  return await alertDialog(
+                      context: context,
+                      titulo: "Confirmar",
+                      contenido: "¿Desea eliminar la localidad?");
                 },
                 onDismissed: (direction) {
                   DB.delete(localidad);
                   cargarLocations();
                 },
                 child: GFListTile(
-                  title: Text(localidad.nombre.toString()),
-                  subTitle: Text(localidad.departamento.toString() +
-                      '-' +
-                      localidad.municipio.toString()),
+                  title: Text(localidad.nombre.toString(),
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  subTitle: Text(
+                      localidad.departamento.toString() +
+                          '-' +
+                          localidad.municipio.toString(),
+                      style: TextStyle(
+                        fontSize: 13,
+                      )),
                   description: Text(localidad.detalle.toString()),
                   avatar: ClipOval(
                     child: SizedBox(
@@ -230,6 +250,31 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void eliminarTodo() async {
+    try {
+      var confirm = (await alertDialog(
+          context: context,
+          titulo: "Confirmar",
+          contenido: "¿Desea eliminar la localidad?"))!;
+      if (confirm) {
+        DB.deleteAll();
+        cargarLocations();
+        Navigator.of(context).pop();
+        final sb = MySnackBar(
+            context: context,
+            contenido: 'Localidades eliminadas',
+            color: const Color(0xFF3C6448));
+        ScaffoldMessenger.of(context).showSnackBar(sb);
+      }
+    } on Exception catch (_) {
+      final sb = MySnackBar(
+          context: context,
+          contenido: 'Eliminacion fallida',
+          color: const Color(0xFF8A1506));
+      ScaffoldMessenger.of(context).showSnackBar(sb);
+    }
+  }
+
   Future<bool> storagePermission() async {
     if (await Permission.manageExternalStorage.request().isGranted) {
       return true;
@@ -261,20 +306,33 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> importLocatios() async {
-    if (await storagePermission()) {
-      File? file = await getFile();
+    try {
+      if (await storagePermission()) {
+        File? file = await getFile();
 
-      if (file != null) {
-        final contents = await file.readAsString();
-        List<Localidad> localidades = listGenerate(contents);
-        if (localidades.length > 0) {
-          for (var localidad in localidades) {
-            DB.insert(localidad);
+        if (file != null) {
+          final contents = await file.readAsString();
+          List<Localidad> localidades = listGenerate(contents);
+          if (localidades.length > 0) {
+            for (var localidad in localidades) {
+              DB.insert(localidad);
+            }
+            cargarLocations();
+            Navigator.of(context).pop();
+            final sb = MySnackBar(
+                context: context,
+                contenido: 'Localidades importadas correctamente',
+                color: const Color(0xFF3C6448));
+            ScaffoldMessenger.of(context).showSnackBar(sb);
           }
-          cargarLocations();
-          Navigator.of(context).pop();
         }
       }
+    } on Exception catch (_) {
+      final sb = MySnackBar(
+          context: context,
+          contenido: 'Importacion fallida',
+          color: const Color(0xFF8A1506));
+      ScaffoldMessenger.of(context).showSnackBar(sb);
     }
   }
 

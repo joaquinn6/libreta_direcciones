@@ -48,6 +48,14 @@ class DB {
         .delete("localidades", where: "id = ?", whereArgs: [localidad.id]);
   }
 
+  static deleteAll() async {
+    Database database = await _openDB();
+
+    return database.execute(
+      """DELETE FROM localidades;""",
+    );
+  }
+
   static Future<List<Localidad>> localidades(String search) async {
     Database database = await _openDB();
     List<Map<String, dynamic>> locationsMap = await database.query((search
