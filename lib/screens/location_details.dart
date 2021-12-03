@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../providers/location_provider.dart';
 import '../components/super_actionbuttom.dart';
+import '../providers/location_provider.dart';
+import '../components/alert_dialog.dart';
+import '../db.dart';
 
 class DetailLocation extends StatelessWidget {
   const DetailLocation({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class DetailLocation extends StatelessWidget {
     final Brightness brightnessValue =
         MediaQuery.of(context).platformBrightness;
     bool isDark = brightnessValue == Brightness.dark;
+    bool confirm = false;
     return Scaffold(
       appBar: AppBar(
         title: Text(provider.localidad!.nombre.toString()),
@@ -135,7 +138,14 @@ class DetailLocation extends StatelessWidget {
                     : Color.fromARGB(255, 0, 151, 161)),
           ),
           ActionButton(
-            onPressed: () => {},
+            onPressed: () async => {
+              confirm = (await alertDialog(context))!,
+              if (confirm)
+                {
+                  DB.delete(provider.localidad!),
+                  Navigator.pop(context),
+                }
+            },
             tooltiptext: 'Eliminar',
             icon: Icon(Icons.delete_outline,
                 color: (isDark) ? Color(0xFFFC2206) : Color(0xFF8A1506)),

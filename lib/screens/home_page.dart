@@ -14,6 +14,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:share/share.dart';
 
 import '../providers/location_provider.dart';
+import '../components/alert_dialog.dart';
 import '../db.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -114,27 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 confirmDismiss: (DismissDirection direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text("Confirmación"),
-                        content: const Text(
-                            "Seguro que desea eliminar esta Dirección"),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text("Cancelar"),
-                          ),
-                          ElevatedButton(
-                              onPressed: () => Navigator.of(context).pop(true),
-                              child: const Text("Eliminar")),
-                        ],
-                      );
-                    },
-                  );
+                  return await alertDialog(context);
                 },
                 onDismissed: (direction) {
                   DB.delete(localidad);
