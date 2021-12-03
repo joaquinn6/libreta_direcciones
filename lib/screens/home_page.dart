@@ -13,9 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:share/share.dart';
 
-import '../components/snakbar.dart';
 import '../providers/location_provider.dart';
 import '../components/alert_dialog.dart';
+import '../components/snakbar.dart';
 import '../db.dart';
 
 class MyHomePage extends StatefulWidget {

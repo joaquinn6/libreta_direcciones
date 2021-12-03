@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:share/share.dart';
 
 import '../components/super_actionbuttom.dart';
 import '../providers/location_provider.dart';
@@ -130,7 +131,11 @@ class DetailLocation extends StatelessWidget {
                     : Color.fromARGB(255, 92, 89, 89)),
           ),
           ActionButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Share.share(
+                '${provider.localidad!.nombre}: https://www.google.com/maps/search/?api=1&query=${provider.localidad!.latitude},${provider.localidad!.longitude}',
+              )
+            },
             tooltiptext: 'Compartir',
             icon: Icon(Icons.share_outlined,
                 color: (isDark)
