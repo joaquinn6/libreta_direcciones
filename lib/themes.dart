@@ -21,7 +21,7 @@ ThemeData lightTheme = ThemeData(
   ),
   canvasColor: const Color(0xFFFFFFFF),
   dividerColor: const Color(0xFFB5EDB3),
-  dialogBackgroundColor: const Color(0xE1FFFFFF),
+  dialogBackgroundColor: Color.fromARGB(255, 255, 255, 255),
   textTheme: GoogleFonts.rubikTextTheme(),
   appBarTheme: const AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle(

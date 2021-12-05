@@ -133,7 +133,7 @@ class DetailLocation extends StatelessWidget {
           ActionButton(
             onPressed: () => {
               Share.share(
-                '${provider.localidad!.nombre}: https://www.google.com/maps/search/?api=1&query=${provider.localidad!.latitude},${provider.localidad!.longitude}',
+                '${provider.localidad!.nombre}:\nhttps://www.google.com/maps/search/?api=1&query=${provider.localidad!.latitude},${provider.localidad!.longitude}',
               )
             },
             tooltiptext: 'Compartir',

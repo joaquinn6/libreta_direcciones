@@ -255,7 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
       var confirm = (await alertDialog(
           context: context,
           titulo: "Confirmar",
-          contenido: "¿Desea eliminar la localidad?"))!;
+          contenido: "¿Desea eliminar TODAS las localidades?"))!;
       if (confirm) {
         DB.deleteAll();
         cargarLocations();
