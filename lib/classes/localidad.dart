@@ -97,4 +97,36 @@ class Localidad {
     l.telefono = model['telefono'];
     return l;
   }
+
+  static List<List<dynamic>> toCsv(List<Localidad> localidades) {
+    List<List<dynamic>> rows = [];
+    List<dynamic> row = [];
+    row.add("Nombre");
+    row.add("Dirección");
+    row.add("Notas");
+    row.add("Teléfono");
+    row.add("País");
+    row.add("Departamento");
+    row.add("Municipio");
+    row.add("Fecha");
+    row.add("Latitud");
+    row.add("Longitud");
+    rows.add(row);
+
+    for (int i = 0; i < localidades.length; i++) {
+      List<dynamic> row = [];
+      row.add(localidades[i].nombre);
+      row.add(localidades[i].detalle);
+      row.add(localidades[i].notas);
+      row.add(localidades[i].telefono);
+      row.add(localidades[i].pais);
+      row.add(localidades[i].departamento);
+      row.add(localidades[i].municipio);
+      row.add(localidades[i].fecha!.toString().split(' ')[0]);
+      row.add(localidades[i].latitude);
+      row.add(localidades[i].longitude);
+      rows.add(row);
+    }
+    return rows;
+  }
 }

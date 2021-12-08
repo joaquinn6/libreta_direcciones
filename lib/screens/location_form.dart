@@ -74,7 +74,7 @@ class _FormGPSState extends State<FormGPS> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
-                        labelText: "Telefono", icon: Icon(Icons.call_outlined)),
+                        labelText: "Teléfono", icon: Icon(Icons.call_outlined)),
                     initialValue: (provider.isEditing)
                         ? provider.localidad!.telefono.toString()
                         : '',

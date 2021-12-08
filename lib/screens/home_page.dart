@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:csv/csv.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
@@ -77,7 +78,9 @@ class _MyHomePageState extends State<MyHomePage> {
             leading: Icon(Icons.table_chart_outlined),
             title: Text('Excel'),
             subtitle: Text('Compartir archivo excel'),
-            onTap: () {},
+            onTap: () {
+              toExcel();
+            },
           ),
           ListTile(
             leading: Icon(Icons.delete_outline_rounded),
@@ -242,10 +245,29 @@ class _MyHomePageState extends State<MyHomePage> {
     if (await storagePermission()) {
       List<Localidad> locasiones = await DB.localidades("");
       String jsonLocasiones = jsonEncode(locasiones);
-      String nameFile = await pathFileName();
+      String nameFile = await pathFileName('json');
       if (nameFile != '') {
         File file = File(nameFile);
         await file.writeAsString('$jsonLocasiones');
+        print('SAVED in $nameFile');
+        DateTime fecha = DateTime.now();
+
+        String fechaparseada = fecha.toIso8601String();
+
+        Share.shareFiles([nameFile], text: 'Mis puntos-$fechaparseada');
+      }
+    }
+  }
+
+  void toExcel() async {
+    if (await storagePermission()) {
+      List<Localidad> locasiones = await DB.localidades("");
+      List<List<dynamic>> rows = Localidad.toCsv(locasiones);
+      String csv = const ListToCsvConverter().convert(rows);
+      String nameFile = await pathFileName('csv');
+      if (nameFile != '') {
+        File file = File(nameFile);
+        await file.writeAsString('$csv');
         print('SAVED in $nameFile');
         DateTime fecha = DateTime.now();
 
@@ -301,11 +323,11 @@ class _MyHomePageState extends State<MyHomePage> {
     return false;
   }
 
-  Future<String> pathFileName() async {
+  Future<String> pathFileName(String tipo) async {
     Directory? directory = await getExternalStorageDirectory();
     if (directory != null) {
       String pathDirectory = directory.path;
-      String pathWithNameFile = '$pathDirectory/MP-respaldo.json';
+      String pathWithNameFile = '$pathDirectory/MP-respaldo.$tipo';
       return pathWithNameFile;
     }
     return '';
