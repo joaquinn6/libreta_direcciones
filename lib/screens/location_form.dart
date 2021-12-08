@@ -16,6 +16,8 @@ class _FormGPSState extends State<FormGPS> {
   final formkey = GlobalKey<FormState>();
   late String nombre = "";
   late String detalle = "";
+  late String telefono = "";
+  late String notas = "";
   late LocationData? ubicacion = null;
   final controllerDepto = TextEditingController();
   final controllerMuni = TextEditingController();
@@ -57,7 +59,7 @@ class _FormGPSState extends State<FormGPS> {
                   ),
                   TextFormField(
                     decoration: const InputDecoration(
-                        labelText: "Detalle",
+                        labelText: "Dirección",
                         icon: Icon(Icons.directions_outlined)),
                     initialValue: (provider.isEditing)
                         ? provider.localidad!.detalle.toString()
@@ -68,6 +70,31 @@ class _FormGPSState extends State<FormGPS> {
                     minLines: 1,
                     onSaved: (value) {
                       detalle = value!;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Telefono", icon: Icon(Icons.call_outlined)),
+                    initialValue: (provider.isEditing)
+                        ? provider.localidad!.telefono.toString()
+                        : '',
+                    keyboardType: TextInputType.phone,
+                    maxLength: 20,
+                    onSaved: (value) {
+                      telefono = value!;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Notas", icon: Icon(Icons.notes_outlined)),
+                    initialValue: (provider.isEditing)
+                        ? provider.localidad!.notas.toString()
+                        : '',
+                    maxLength: 500,
+                    maxLines: 5,
+                    minLines: 1,
+                    onSaved: (value) {
+                      notas = value!;
                     },
                   ),
                   Autocomplete<String>(
@@ -178,6 +205,8 @@ class _FormGPSState extends State<FormGPS> {
       formkey.currentState!.save();
       localidad.nombre = nombre;
       localidad.detalle = detalle;
+      localidad.telefono = telefono;
+      localidad.notas = notas;
       localidad.departamento = provider.departamento;
       localidad.municipio = provider.municipio;
       if (ubicacion != null) {

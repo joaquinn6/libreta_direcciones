@@ -30,9 +30,28 @@ class DetailLocation extends StatelessWidget {
           child: Column(
             children: [
               ListTile(
-                  title: SelectableText(provider.localidad!.nombre.toString()),
+                  leading: Icon(Icons.directions_outlined),
+                  title: SelectableText(provider.localidad!.departamento! +
+                      ' - ' +
+                      provider.localidad!.municipio!),
                   subtitle:
                       SelectableText(provider.localidad!.detalle.toString())),
+              provider.localidad!.notas.toString() != ''
+                  ? ListTile(
+                      leading: Icon(Icons.notes_outlined),
+                      title:
+                          SelectableText(provider.localidad!.notas.toString()),
+                    )
+                  : Container(),
+              provider.localidad!.telefono.toString() != ''
+                  ? ListTile(
+                      leading: Icon(Icons.call_outlined),
+                      title: SelectableText(
+                          provider.localidad!.telefono.toString()),
+                      onTap: () =>
+                          launchCall(provider.localidad!.telefono.toString()),
+                    )
+                  : Container(),
               ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: Card(
@@ -71,13 +90,6 @@ class DetailLocation extends StatelessWidget {
                         ],
                       )),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                alignment: Alignment.centerLeft,
-                child: Text(provider.localidad!.departamento! +
-                    ' - ' +
-                    provider.localidad!.municipio!),
               ),
             ],
           ),
@@ -205,5 +217,9 @@ class DetailLocation extends StatelessWidget {
     } catch (e) {
       await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
     }
+  }
+
+  Future<void> launchCall(String number) async {
+    await launch("tel:$number");
   }
 }

@@ -66,12 +66,18 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           ListTile(
-            leading: Icon(Icons.import_export_outlined),
+            leading: Icon(Icons.upload_file_outlined),
             title: Text('Importar'),
             subtitle: Text('Recupera tus localidades'),
             onTap: () {
               importLocatios();
             },
+          ),
+          ListTile(
+            leading: Icon(Icons.table_chart_outlined),
+            title: Text('Excel'),
+            subtitle: Text('Compartir archivo excel'),
+            onTap: () {},
           ),
           ListTile(
             leading: Icon(Icons.delete_outline_rounded),

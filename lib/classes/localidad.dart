@@ -13,22 +13,27 @@ class Localidad {
   String? departamento;
   String? municipio;
   bool favorito;
+  String? notas;
+  String? telefono;
 
-  Localidad(
-      {this.id,
-      this.nombre = "",
-      this.detalle = "",
-      this.latitude = 0.0,
-      this.longitude = 0.0,
-      this.accuracy = 0.0,
-      this.altitude = 0.0,
-      this.heading = 0.0,
-      this.time = 0.0,
-      this.fecha,
-      this.pais = "Nicaragua",
-      this.departamento = "",
-      this.municipio = "",
-      this.favorito = false});
+  Localidad({
+    this.id,
+    this.nombre = "",
+    this.detalle = "",
+    this.latitude = 0.0,
+    this.longitude = 0.0,
+    this.accuracy = 0.0,
+    this.altitude = 0.0,
+    this.heading = 0.0,
+    this.time = 0.0,
+    this.fecha,
+    this.pais = "Nicaragua",
+    this.departamento = "",
+    this.municipio = "",
+    this.favorito = false,
+    this.notas = "",
+    this.telefono = "",
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -45,7 +50,9 @@ class Localidad {
       'pais': pais,
       'departamento': departamento,
       'municipio': municipio,
-      'favorito': favorito
+      'favorito': favorito,
+      'notas': notas,
+      'telefono': telefono,
     };
   }
 
@@ -64,7 +71,9 @@ class Localidad {
       'pais': pais,
       'departamento': departamento,
       'municipio': municipio,
-      'favorito': favorito
+      'favorito': favorito,
+      'telefono': telefono,
+      'notas': notas,
     };
   }
 
@@ -84,6 +93,8 @@ class Localidad {
     l.departamento = model['departamento'];
     l.municipio = model['municipio'];
     l.favorito = model['favorito'];
+    l.notas = model['notas'];
+    l.telefono = model['telefono'];
     return l;
   }
 }
