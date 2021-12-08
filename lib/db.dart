@@ -21,7 +21,7 @@ class DB {
             municipio VARCHAR(50),
             favorito INTEGER,
             notas VARCHAR(500),
-            telefono VARCHAR(15),
+            telefono VARCHAR(15)
             )""",
   ];
 
