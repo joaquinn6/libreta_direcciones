@@ -54,6 +54,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   csv: ^5.0.1
+  font_awesome_flutter: ^9.2.0
 
 dev_dependencies:
   flutter_test:

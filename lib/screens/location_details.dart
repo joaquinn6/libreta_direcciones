@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,9 @@ class DetailLocation extends StatelessWidget {
                   ? ListTile(
                       leading: Icon(Icons.call_outlined),
                       title: SelectableText(
-                          provider.localidad!.telefono.toString()),
+                        provider.localidad!.telefono.toString(),
+                        style: TextStyle(color: Colors.blue),
+                      ),
                       onTap: () =>
                           launchCall(provider.localidad!.telefono.toString()),
                     )
@@ -99,23 +102,24 @@ class DetailLocation extends StatelessWidget {
         distance: 160.0,
         children: [
           ActionButton(
-            onPressed: () => {
-              launchWaze(
-                  provider.localidad!.latitude, provider.localidad!.longitude),
-            },
-            tooltiptext: 'Waze',
-            icon: Icon(Icons.directions_car_filled_outlined,
-                color: (isDark)
-                    ? Color.fromARGB(255, 0, 158, 158)
-                    : Color.fromARGB(255, 100, 216, 224)),
-          ),
+              onPressed: () => {
+                    launchWaze(provider.localidad!.latitude,
+                        provider.localidad!.longitude),
+                  },
+              tooltiptext: 'Waze',
+              icon: FaIcon(FontAwesomeIcons.waze,
+                  size: 22,
+                  color: (isDark)
+                      ? Color.fromARGB(255, 0, 158, 158)
+                      : Color.fromARGB(255, 100, 216, 224))),
           ActionButton(
             onPressed: () => {
               launchMaps(
                   provider.localidad!.latitude, provider.localidad!.longitude),
             },
             tooltiptext: 'Maps',
-            icon: Icon(Icons.directions_car_filled_outlined,
+            icon: FaIcon(FontAwesomeIcons.mapMarkerAlt,
+                size: 22,
                 color: (isDark)
                     ? Color.fromARGB(255, 99, 226, 82)
                     : Color.fromARGB(255, 5, 109, 5)),

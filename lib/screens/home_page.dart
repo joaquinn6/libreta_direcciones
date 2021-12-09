@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:csv/csv.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
@@ -69,15 +70,23 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             leading: Icon(Icons.upload_file_outlined),
             title: Text('Importar'),
-            subtitle: Text('Recupera tus localidades'),
+            subtitle:
+                Text('Recupera tus localidades importadas con anterioridad'),
             onTap: () {
               importLocatios();
             },
           ),
           ListTile(
-            leading: Icon(Icons.table_chart_outlined),
+            leading: Padding(
+              padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
+              child: FaIcon(
+                FontAwesomeIcons.fileCsv,
+                size: 21.0,
+              ),
+            ),
             title: Text('Excel'),
-            subtitle: Text('Compartir archivo excel'),
+            subtitle:
+                Text('Compartir tus localidades en un archivo .csv para Excel'),
             onTap: () {
               toExcel();
             },
@@ -85,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ListTile(
             leading: Icon(Icons.delete_outline_rounded),
             title: Text('Eliminar todo'),
-            subtitle: Text('Elimina todas tus localidades'),
+            subtitle: Text('Elimina todas tus localidades de la aplicación'),
             onTap: () {
               eliminarTodo();
             },
