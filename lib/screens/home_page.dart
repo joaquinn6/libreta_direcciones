@@ -272,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (await storagePermission()) {
       List<Localidad> locasiones = await DB.localidades("");
       List<List<dynamic>> rows = Localidad.toCsv(locasiones);
-      String csv = const ListToCsvConverter().convert(rows);
+      String csv = const ListToCsvConverter(fieldDelimiter: ';').convert(rows);
       String nameFile = await pathFileName('csv');
       if (nameFile != '') {
         File file = File(nameFile);
