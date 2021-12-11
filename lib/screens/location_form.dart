@@ -1,6 +1,7 @@
 import 'package:libreta_de_ubicaciones/static/static_lists.dart';
 import 'package:libreta_de_ubicaciones/classes/localidad.dart';
 import 'package:libreta_de_ubicaciones/db.dart';
+import '../components/snakbar.dart';
 import '../providers/location_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:location/location.dart';
@@ -41,6 +42,7 @@ class _FormGPSState extends State<FormGPS> {
                 key: formkey,
                 child: Column(children: [
                   TextFormField(
+                    autofocus: true,
                     decoration: const InputDecoration(
                         labelText: "Nombre", icon: Icon(Icons.home_outlined)),
                     onSaved: (value) {
@@ -168,15 +170,24 @@ class _FormGPSState extends State<FormGPS> {
                       provider.municipio = municipioSelected;
                     },
                   ),
-                  ElevatedButton(
-                      onPressed: () => _findLocation(provider),
-                      child: const Icon(Icons.location_searching_outlined)),
+                  Container(
+                    padding: EdgeInsets.all(16.0),
+                    child: ElevatedButton(
+                        onPressed: () => _findLocation(provider),
+                        child: Column(
+                          children: [
+                            const Text('Obtener ubicación'),
+                            const Icon(Icons.location_searching_outlined),
+                          ],
+                        )),
+                  ),
                   Center(
                     child: Text(provider.textLocalidad),
                   ),
                 ]))),
       ),
       floatingActionButton: FloatingActionButton(
+          tooltip: "Guardar cambios",
           child: Icon(Icons.save_outlined,
               color: (isDark) ? Colors.white : Colors.black),
           backgroundColor: Theme.of(context).primaryColor,
@@ -224,6 +235,11 @@ class _FormGPSState extends State<FormGPS> {
         localidad.heading = provider.localidad!.heading;
         localidad.time = provider.localidad!.time;
       } else {
+        final sb = MySnackBar(
+            context: context,
+            contenido: 'Obtenga su ubicación con el boton para poder guardar',
+            color: const Color(0xFF8A1506));
+        ScaffoldMessenger.of(context).showSnackBar(sb);
         return;
       }
       if (provider.isEditing) {

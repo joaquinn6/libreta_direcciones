@@ -41,66 +41,69 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       drawer: Drawer(
+          semanticLabel: 'Menu de opciones',
           child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color:
-                  (isDark) ? const Color(0xFF3C6448) : const Color(0xFFB5EDB3),
-            ),
-            child: Text(
-              'Opciones',
-              style: TextStyle(
-                color: (isDark)
-                    ? const Color(0xFFF6F8F7)
-                    : const Color(0xFF101110),
-                fontSize: 24,
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: (isDark)
+                      ? const Color(0xFF3C6448)
+                      : const Color(0xFFB5EDB3),
+                ),
+                child: Text(
+                  'Opciones',
+                  style: TextStyle(
+                    color: (isDark)
+                        ? const Color(0xFFF6F8F7)
+                        : const Color(0xFF101110),
+                    fontSize: 24,
+                  ),
+                ),
               ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(Icons.share_outlined),
-            title: Text('Compartir'),
-            subtitle: Text('Guarda o comparte tus locaciones'),
-            onTap: () {
-              saveLocations();
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.upload_file_outlined),
-            title: Text('Importar'),
-            subtitle:
-                Text('Recupera tus localidades importadas con anterioridad'),
-            onTap: () {
-              importLocatios();
-            },
-          ),
-          ListTile(
-            leading: Padding(
-              padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
-              child: FaIcon(
-                FontAwesomeIcons.fileCsv,
-                size: 21.0,
+              ListTile(
+                leading: Icon(Icons.share_outlined),
+                title: Text('Compartir'),
+                subtitle: Text('Guarda o comparte tus locaciones'),
+                onTap: () {
+                  saveLocations();
+                },
               ),
-            ),
-            title: Text('Excel'),
-            subtitle:
-                Text('Compartir tus localidades en un archivo .csv para Excel'),
-            onTap: () {
-              toExcel();
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.delete_outline_rounded),
-            title: Text('Eliminar todo'),
-            subtitle: Text('Elimina todas tus localidades de la aplicación'),
-            onTap: () {
-              eliminarTodo();
-            },
-          ),
-        ],
-      )),
+              ListTile(
+                leading: Icon(Icons.upload_file_outlined),
+                title: Text('Importar'),
+                subtitle: Text(
+                    'Recupera tus localidades importadas con anterioridad'),
+                onTap: () {
+                  importLocatios();
+                },
+              ),
+              ListTile(
+                leading: Padding(
+                  padding: EdgeInsets.fromLTRB(4, 0, 0, 0),
+                  child: FaIcon(
+                    FontAwesomeIcons.fileCsv,
+                    size: 21.0,
+                  ),
+                ),
+                title: Text('Excel'),
+                subtitle: Text(
+                    'Compartir tus localidades en un archivo .csv para Excel'),
+                onTap: () {
+                  toExcel();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete_outline_rounded),
+                title: Text('Eliminar todo'),
+                subtitle:
+                    Text('Elimina todas tus localidades de la aplicación'),
+                onTap: () {
+                  eliminarTodo();
+                },
+              ),
+            ],
+          )),
       appBar: AppBar(
         title: const Text('Libreta de GPS'),
         actions: [
@@ -214,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }),
       floatingActionButton: FloatingActionButton(
+          tooltip: "Agregart ubicación",
           child: Icon(Icons.add_location_alt_outlined,
               color: (isDark) ? Colors.white : Colors.black),
           backgroundColor: Theme.of(context).primaryColor,
